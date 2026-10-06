@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
 import { Notice, PageHeader, Stat } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
@@ -21,6 +22,7 @@ export default async function AttendancePage({ searchParams }: PageProps<"/porta
   const user = await requireUser();
   const db = await getDB();
   if (user.role === "student") return <StudentAttendance user={user} db={db} />;
+  if (user.role === "parent") redirect("/portal");
 
   const sp = await searchParams;
   const classIds = classIdsFor(user, db);

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { formatDate, today } from "@/lib/format";
 import { school } from "@/lib/school";
@@ -50,10 +51,11 @@ export default function ContactPage() {
           <div className="card bg-grass-soft">
             <h3 className="text-xl font-semibold">How to join us</h3>
             <ol className="mt-2 list-inside list-decimal space-y-1 text-ink/80">
-              <li>Call or visit the school office to collect an admission form.</li>
+              <li>Apply online, or call or visit the school office for an admission form.</li>
               <li>Your child sits the entrance examination.</li>
               <li>Receive your admission letter and welcome pack.</li>
             </ol>
+            <Link href="/apply" className="btn-sun mt-4">📝 Apply online</Link>
           </div>
         </div>
         <ContactForm />

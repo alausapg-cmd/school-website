@@ -1,4 +1,4 @@
-import type { AttendanceRecord, DB, Result, User } from "./types";
+import type { AttendanceRecord, DB, FeeItem, Payment, Result, TimetableSlot, User } from "./types";
 
 function daysFromNow(n: number) {
   const d = new Date();
@@ -19,33 +19,68 @@ function schoolDaysBack(count: number) {
 
 const PASSWORD = "lifebuilders";
 
-const p4 = [
-  ["Zainab Bello", "🦊"],
-  ["Chidi Okeke", "🐯"],
-  ["Tomi Adewale", "🐼"],
-  ["David Mensah", "🦁"],
-  ["Amara Nwosu", "🦄"],
-  ["Ibrahim Musa", "🐸"],
-] as const;
-const p5 = [
-  ["Kemi Johnson", "🐨"],
-  ["Emeka Obi", "🐙"],
-  ["Fatima Sani", "🦋"],
-  ["Joshua Etim", "🐬"],
-  ["Ngozi Eze", "🐝"],
-  ["Seyi Coker", "🦉"],
-] as const;
+type Kid = readonly [name: string, avatar: string, gender: "Male" | "Female", boarding: boolean, dob: string];
+const p4: Kid[] = [
+  ["Zainab Bello", "🦊", "Female", false, "2017-03-14"],
+  ["Chidi Okeke", "🐯", "Male", true, "2017-06-02"],
+  ["Tomi Adewale", "🐼", "Female", false, "2017-01-21"],
+  ["David Mensah", "🦁", "Male", false, "2016-11-09"],
+  ["Amara Nwosu", "🦄", "Female", true, "2017-08-30"],
+  ["Ibrahim Musa", "🐸", "Male", false, "2017-04-17"],
+];
+const p5: Kid[] = [
+  ["Kemi Bello", "🐨", "Female", false, "2016-02-11"],
+  ["Emeka Obi", "🐙", "Male", true, "2016-05-25"],
+  ["Fatima Sani", "🦋", "Female", false, "2015-12-03"],
+  ["Joshua Etim", "🐬", "Male", false, "2016-07-19"],
+  ["Ngozi Eze", "🐝", "Female", true, "2016-03-08"],
+  ["Seyi Coker", "🦉", "Male", false, "2016-09-27"],
+];
 
-function students(list: readonly (readonly [string, string])[], classId: string, start: number): User[] {
-  return list.map(([name, avatar], i) => ({
-    id: `stu_${start + i}`,
-    name,
-    avatar,
-    role: "student",
-    classId,
-    email: i === 0 && classId === "p4" ? "student@lifebuilders.test" : `${name.split(" ")[0].toLowerCase()}@lifebuilders.test`,
-    password: PASSWORD,
-  }));
+const PARENT_TITLES = ["Mrs", "Mr", "Mrs", "Dr", "Mrs", "Mr"];
+
+// Students plus one parent account per family (children who share a surname share a parent).
+function family(): User[] {
+  const out: User[] = [];
+  const parents = new Map<string, User>();
+  let n = 1;
+  for (const [list, classId, start] of [[p4, "p4", 1], [p5, "p5", 7]] as const) {
+    list.forEach(([name, avatar, gender, boarding, dob], i) => {
+      const surname = name.split(" ")[1];
+      let parent = parents.get(surname);
+      if (!parent) {
+        const first = parents.size === 0;
+        parent = {
+          id: `par_${parents.size + 1}`,
+          name: `${PARENT_TITLES[parents.size % PARENT_TITLES.length]} ${surname}`,
+          email: first ? "parent@lifebuilders.test" : `${surname.toLowerCase()}.family@lifebuilders.test`,
+          password: PASSWORD,
+          role: "parent",
+          avatar: "👪",
+          phone: `0803 ${String(1000 + parents.size * 137).slice(0, 3)} ${String(4000 + parents.size * 211)}`,
+        };
+        parents.set(surname, parent);
+        out.push(parent);
+      }
+      out.push({
+        id: `stu_${start + i}`,
+        name,
+        avatar,
+        role: "student",
+        classId,
+        email: i === 0 && classId === "p4" ? "student@lifebuilders.test" : `${name.split(" ")[0].toLowerCase()}@lifebuilders.test`,
+        password: PASSWORD,
+        gender,
+        boarding,
+        dob,
+        parentId: parent.id,
+        admissionNo: `LBIS/${classId === "p4" ? "2023" : "2022"}/${String(n++).padStart(3, "0")}`,
+        admittedOn: classId === "p4" ? "2023-09-11" : "2022-09-12",
+        address: "Iyana Ilogbo, Ogun State",
+      });
+    });
+  }
+  return out;
 }
 
 export function buildSeed(): DB {
@@ -71,8 +106,7 @@ export function buildSeed(): DB {
       classIds: ["p4", "p5"],
       subjectIds: ["science", "computer", "arts"],
     },
-    ...students(p4, "p4", 1),
-    ...students(p5, "p5", 7),
+    ...family(),
   ];
 
   const studentIds = users.filter((u) => u.role === "student");
@@ -109,7 +143,77 @@ export function buildSeed(): DB {
     });
   });
 
+  const SESSION = "2026/2027";
+  const TERM = "First Term";
+  const feeItems: FeeItem[] = [
+    { id: "fee_1", name: "Tuition", amount: 85000, classId: "p4", term: TERM, session: SESSION },
+    { id: "fee_2", name: "Tuition", amount: 90000, classId: "p5", term: TERM, session: SESSION },
+    { id: "fee_3", name: "Books & stationery", amount: 15000, classId: "all", term: TERM, session: SESSION },
+    { id: "fee_4", name: "Development levy", amount: 10000, classId: "all", term: TERM, session: SESSION },
+    { id: "fee_5", name: "PTA levy", amount: 5000, classId: "all", term: TERM, session: SESSION },
+    { id: "fee_6", name: "Boarding & feeding", amount: 150000, classId: "all", term: TERM, session: SESSION, boardingOnly: true },
+  ];
+  const payPlan = [1, 0.5, 1, 0, 1, 0.6, 1, 0.4, 1, 1, 0, 0.75];
+  const payments: Payment[] = [];
+  let receipt = 1;
+  studentIds.forEach((st, i) => {
+    const billed = feeItems
+      .filter((f) => (f.classId === "all" || f.classId === st.classId) && (!f.boardingOnly || st.boarding))
+      .reduce((t, f) => t + f.amount, 0);
+    const share = payPlan[i % payPlan.length];
+    if (!share) return;
+    const total = Math.round((billed * share) / 1000) * 1000;
+    const parts = share === 1 && i % 3 === 0 ? [Math.round(total * 0.6 / 1000) * 1000, 0] : [total];
+    if (parts.length === 2) parts[1] = total - parts[0];
+    parts.forEach((amount, k) => {
+      payments.push({
+        id: `pay_${receipt}`,
+        receiptNo: `LB-${String(receipt).padStart(5, "0")}`,
+        studentId: st.id,
+        term: TERM,
+        session: SESSION,
+        amount,
+        method: (["Bank transfer", "POS", "Cash"] as const)[(i + k) % 3],
+        reference: (i + k) % 3 === 2 ? "" : `TRF${7310 + receipt * 13}`,
+        date: daysFromNow(-30 + i + k * 9),
+        receivedBy: "adm_1",
+      });
+      receipt++;
+    });
+  });
+
+  const DAY_PLAN: Record<string, string[]> = {
+    p4: ["maths", "english", "science", "social", "crs", "arts", "computer"],
+    p5: ["english", "maths", "crs", "science", "computer", "social", "arts"],
+  };
+  const timetable: TimetableSlot[] = [];
+  for (const classId of ["p4", "p5"]) {
+    for (let day = 1; day <= 5; day++) {
+      for (let period = 1; period <= 6; period++) {
+        const plan = DAY_PLAN[classId];
+        // Maths and English every morning, the rest rotate.
+        const subjectId = period <= 2 ? plan[(period - 1 + day) % 2] : plan[2 + ((day * 3 + period) % 5)];
+        timetable.push({ classId, day, period, subjectId });
+      }
+    }
+  }
+
   return {
+    settings: { term: TERM, session: SESSION, termStarts: "2026-09-14", termEnds: "2026-12-18", nextTermBegins: "2027-01-11" },
+    feeItems,
+    payments,
+    timetable,
+    notices: [
+      { id: "ntc_1", title: "Mid-term break", body: "Mid-term break runs from Thursday 29th October to Monday 2nd November. Boarders will be released after classes on Wednesday. School resumes Tuesday 3rd November.", audience: "everyone", date: daysFromNow(-2), authorId: "adm_1", pinned: true },
+      { id: "ntc_2", title: "School fees reminder", body: "Parents with outstanding first term fees are kindly reminded to complete payment before mid-term. Please send your proof of payment to the school office or show it at the bursary.", audience: "parents", date: daysFromNow(-5), authorId: "adm_1" },
+      { id: "ntc_3", title: "Staff meeting on Friday", body: "All teaching staff should attend the staff meeting on Friday at 2:30pm in the staff room. Please bring your scheme of work and lesson notes for the term.", audience: "staff", date: daysFromNow(-1), authorId: "adm_1" },
+      { id: "ntc_4", title: "Inter-house sports practice", body: "Sports practice holds every Wednesday after lunch. Come with your house T-shirt and canvas shoes.", audience: "students", date: daysFromNow(-3), authorId: "tch_2" },
+    ],
+    applications: [
+      { id: "app_1", childName: "Esther Adebayo", gender: "Female", dob: "2018-05-12", classWanted: "Primary 3", boarding: false, parentName: "Mrs Bola Adebayo", phone: "0802 555 1234", email: "bola.adebayo@example.com", address: "Ifo, Ogun State", previousSchool: "Grace Nursery & Primary School", status: "pending", note: "", createdAt: daysFromNow(-1) },
+      { id: "app_2", childName: "Daniel Okon", gender: "Male", dob: "2014-02-03", classWanted: "JSS 1", boarding: true, parentName: "Mr Ime Okon", phone: "0813 222 9876", email: "ime.okon@example.com", address: "Ikeja, Lagos", previousSchool: "Bright Stars Primary School", status: "exam booked", note: "Entrance exam booked for Saturday.", createdAt: daysFromNow(-6) },
+      { id: "app_3", childName: "Hannah Lawal", gender: "Female", dob: "2016-10-22", classWanted: "Primary 5", boarding: false, parentName: "Dr Kunle Lawal", phone: "0809 111 4567", email: "kunle.lawal@example.com", address: "Iyana Ilogbo, Ogun State", previousSchool: "Covenant Kids Academy", status: "admitted", note: "Passed entrance exam. Admission letter sent.", createdAt: daysFromNow(-15) },
+    ],
     users,
     classes: [
       { id: "p4", name: "Primary 4 Faith", emoji: "🌱" },

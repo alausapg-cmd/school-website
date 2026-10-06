@@ -16,7 +16,18 @@ let queue: Promise<unknown> = Promise.resolve();
 async function load(): Promise<DB> {
   if (cache) return cache;
   try {
-    cache = JSON.parse(await fs.readFile(DB_PATH, "utf8")) as DB;
+    const stored = JSON.parse(await fs.readFile(DB_PATH, "utf8")) as DB;
+    // Older data files may be missing newer collections; fill them from the seed.
+    const seed = buildSeed();
+    if (!stored.settings) {
+      cache = seed;
+      await save(cache);
+      return cache;
+    }
+    for (const key of Object.keys(seed) as (keyof DB)[]) {
+      if (stored[key] === undefined) (stored as Record<string, unknown>)[key] = seed[key];
+    }
+    cache = stored;
   } catch {
     cache = buildSeed();
     await save(cache);

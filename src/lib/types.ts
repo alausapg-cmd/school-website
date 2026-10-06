@@ -1,4 +1,4 @@
-export type Role = "admin" | "teacher" | "student";
+export type Role = "admin" | "teacher" | "student" | "parent";
 
 export type User = {
   id: string;
@@ -10,6 +10,15 @@ export type User = {
   classId?: string;
   subjectIds?: string[];
   classIds?: string[];
+  phone?: string;
+  // Student record
+  admissionNo?: string;
+  gender?: "Male" | "Female";
+  dob?: string;
+  boarding?: boolean;
+  parentId?: string;
+  admittedOn?: string;
+  address?: string;
 };
 
 export type SchoolClass = { id: string; name: string; emoji: string };
@@ -113,7 +122,76 @@ export type SchoolEvent = {
   emoji: string;
 };
 
+export type Settings = {
+  term: string;
+  session: string;
+  termStarts: string;
+  termEnds: string;
+  nextTermBegins: string;
+};
+
+export type FeeItem = {
+  id: string;
+  name: string;
+  amount: number;
+  classId: string; // "all" applies to every class
+  term: string;
+  session: string;
+  boardingOnly?: boolean;
+};
+
+export type PaymentMethod = "Cash" | "Bank transfer" | "POS" | "Online";
+export type Payment = {
+  id: string;
+  receiptNo: string;
+  studentId: string;
+  term: string;
+  session: string;
+  amount: number;
+  method: PaymentMethod;
+  reference: string;
+  date: string;
+  receivedBy: string;
+};
+
+export type Audience = "everyone" | "staff" | "parents" | "students";
+export type Notice = {
+  id: string;
+  title: string;
+  body: string;
+  audience: Audience;
+  date: string;
+  authorId: string;
+  pinned?: boolean;
+};
+
+export type TimetableSlot = { classId: string; day: number; period: number; subjectId: string };
+
+export type ApplicationStatus = "pending" | "exam booked" | "admitted" | "declined";
+export type Application = {
+  id: string;
+  childName: string;
+  gender: "Male" | "Female";
+  dob: string;
+  classWanted: string;
+  boarding: boolean;
+  parentName: string;
+  phone: string;
+  email: string;
+  address: string;
+  previousSchool: string;
+  status: ApplicationStatus;
+  note: string;
+  createdAt: string;
+};
+
 export type DB = {
+  settings: Settings;
+  feeItems: FeeItem[];
+  payments: Payment[];
+  notices: Notice[];
+  timetable: TimetableSlot[];
+  applications: Application[];
   users: User[];
   classes: SchoolClass[];
   subjects: Subject[];

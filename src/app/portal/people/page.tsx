@@ -13,10 +13,11 @@ export default async function PeoplePage({ searchParams }: PageProps<"/portal/pe
   const sp = await searchParams;
   const { klass, subject } = lookups(db);
   const teachers = db.users.filter((u) => u.role === "teacher");
+  const parents = db.users.filter((u) => u.role === "parent");
 
   return (
     <div>
-      <PageHeader emoji="👥" title="People" text="Teachers and pupils who can log in to the portal." />
+      <PageHeader emoji="👥" title="People" text="Teachers, parents and pupils who can log in to the portal." />
       {sp.added && <Notice>✅ Added! They can log in straight away.</Notice>}
       {typeof sp.error === "string" && <Notice tone="coral">{sp.error}</Notice>}
 
@@ -28,10 +29,11 @@ export default async function PeoplePage({ searchParams }: PageProps<"/portal/pe
             <div><label className="label">Email</label><input name="email" type="email" required className="input" /></div>
             <div><label className="label">Starting password</label><input name="password" defaultValue="lifebuilders" className="input" /></div>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div><label className="label">Phone</label><input name="phone" type="tel" className="input" /></div>
             <div>
               <label className="label">Role</label>
-              <select name="role" className="input"><option value="student">Pupil</option><option value="teacher">Teacher</option></select>
+              <select name="role" className="input"><option value="student">Pupil</option><option value="teacher">Teacher</option><option value="parent">Parent</option></select>
             </div>
             <div>
               <label className="label">Class (pupils)</label>
@@ -63,6 +65,16 @@ export default async function PeoplePage({ searchParams }: PageProps<"/portal/pe
               <div className="text-sm text-ink/60">{t.email}</div>
               <div className="text-xs text-ink/60">{t.subjectIds?.map((s) => subject(s)?.emoji).join(" ")} · {t.classIds?.map((c) => klass(c)?.name).join(", ")}</div>
             </div>
+          </div>
+        ))}
+      </div>
+      <h2 className="mb-3 text-2xl font-semibold">👪 Parents</h2>
+      <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {parents.map((p) => (
+          <div key={p.id} className="card p-4">
+            <div className="font-semibold">{p.avatar} {p.name}</div>
+            <div className="truncate text-xs text-ink/60">{p.email}{p.phone ? ` · ${p.phone}` : ""}</div>
+            <div className="mt-1 text-xs text-ink/60">Children: {db.users.filter((u) => u.parentId === p.id).map((u) => u.name.split(" ")[0]).join(", ") || "none linked"}</div>
           </div>
         ))}
       </div>

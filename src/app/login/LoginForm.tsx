@@ -6,6 +6,7 @@ import { login } from "./actions";
 const demo = [
   { label: "Pupil", who: "Zainab, Primary 4", email: "student@lifebuilders.test", emoji: "🦊", cls: "bg-sun-soft" },
   { label: "Teacher", who: "Mrs Okafor", email: "teacher@lifebuilders.test", emoji: "🌻", cls: "bg-grass-soft" },
+  { label: "Parent", who: "Mrs Bello", email: "parent@lifebuilders.test", emoji: "👪", cls: "bg-sky-soft" },
   { label: "Admin", who: "Head Teacher", email: "admin@lifebuilders.test", emoji: "👑", cls: "bg-grape-soft" },
 ];
 
@@ -38,7 +39,7 @@ export function LoginForm() {
       </form>
       <div>
         <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: lifebuilders)</p>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {demo.map((d) => (
             <button
               key={d.email}

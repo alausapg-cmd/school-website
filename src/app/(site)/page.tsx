@@ -32,7 +32,7 @@ export default async function HomePage() {
               {school.name} is a Christian day and boarding school raising a generation of competent and godly leaders for Nigeria.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/contact" className="btn-sun text-lg">Apply for admission</Link>
+              <Link href="/apply" className="btn-sun text-lg">Apply for admission</Link>
               <Link href="/login" className="btn bg-white/15 text-lg text-white ring-2 ring-white/40 hover:bg-white/25">🎒 Learning Portal</Link>
             </div>
             <div className="mt-7 flex flex-wrap gap-2">

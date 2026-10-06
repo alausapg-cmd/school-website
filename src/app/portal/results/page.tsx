@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/SubmitButton";
 import { Empty, Notice, PageHeader } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { getDB } from "@/lib/db";
 import { gradeFor } from "@/lib/grades";
-import { school } from "@/lib/school";
+import { ordinal, reportFor } from "@/lib/report";
 import { classIdsFor, lookups, studentsIn, subjectsFor } from "@/lib/scope";
 import type { DB, User } from "@/lib/types";
 import { saveResults } from "../actions";
@@ -18,14 +19,15 @@ export default async function ResultsPage({ searchParams }: PageProps<"/portal/r
   const db = await getDB();
   const sp = await searchParams;
   if (user.role === "student") return <ReportCard user={user} db={db} term={sp.term as string | undefined} />;
+  if (user.role === "parent") redirect("/portal");
 
   const classIds = classIdsFor(user, db);
   const subjects = subjectsFor(user, db);
   const pick = (k: string, ok: string[], d: string) => (typeof sp[k] === "string" && ok.includes(sp[k] as string) ? (sp[k] as string) : d);
   const classId = pick("class", classIds, classIds[0]);
   const subjectId = pick("subject", subjects.map((s) => s.id), subjects[0].id);
-  const term = pick("term", TERMS, school.currentTerm);
-  const session = typeof sp.session === "string" && /^\d{4}\/\d{4}$/.test(sp.session) ? sp.session : school.currentSession;
+  const term = pick("term", TERMS, db.settings.term);
+  const session = typeof sp.session === "string" && /^\d{4}\/\d{4}$/.test(sp.session) ? sp.session : db.settings.session;
   const students = studentsIn(db, classId);
   const { klass, subject } = lookups(db);
 
@@ -88,9 +90,9 @@ export default async function ResultsPage({ searchParams }: PageProps<"/portal/r
 
 function ReportCard({ user, db, term }: { user: User; db: DB; term?: string }) {
   const { subject } = lookups(db);
-  const mine = db.results.filter((r) => r.studentId === user.id);
-  const periods = [...new Set(mine.map((r) => `${r.session}|${r.term}`))].sort().reverse();
-  const current = term && periods.includes(term) ? term : periods[0];
+  const rep = reportFor(db, user, term);
+  const periods = rep.periods;
+  const current = rep.current;
   if (!current)
     return (
       <div>
@@ -98,24 +100,14 @@ function ReportCard({ user, db, term }: { user: User; db: DB; term?: string }) {
         <Empty emoji="📭" text="No results yet. Check back at the end of term!" />
       </div>
     );
-  const [session, termName] = current.split("|");
-  const rows = mine.filter((r) => r.session === session && r.term === termName);
-  const avg = rows.reduce((s, r) => s + r.ca + r.exam, 0) / rows.length;
+  const { session, term: termName, rows, avg, position, classSize } = rep;
   const overall = gradeFor(avg);
-  // Position in class for this term.
-  const classmates = studentsIn(db, user.classId!);
-  const averages = classmates
-    .map((c) => {
-      const rs = db.results.filter((r) => r.studentId === c.id && r.session === session && r.term === termName);
-      return { id: c.id, avg: rs.length ? rs.reduce((s, r) => s + r.ca + r.exam, 0) / rs.length : 0 };
-    })
-    .sort((a, b) => b.avg - a.avg);
-  const position = averages.findIndex((a) => a.id === user.id) + 1;
-  const ord = (n: number) => n + (["th", "st", "nd", "rd"][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] ?? "th");
 
   return (
     <div>
       <PageHeader emoji="🏆" title="My report card" text={`${termName}, ${session}`}>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href={`/portal/report/${user.id}?period=${encodeURIComponent(current)}`} className="btn-primary px-4 py-2 text-sm">🖨️ Printable report</Link>
         {periods.length > 1 && (
           <div className="flex gap-2">
             {periods.map((p) => (
@@ -125,6 +117,7 @@ function ReportCard({ user, db, term }: { user: User; db: DB; term?: string }) {
             ))}
           </div>
         )}
+        </div>
       </PageHeader>
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <div className={`rounded-3xl p-6 text-center ${overall.color}`}>
@@ -139,8 +132,8 @@ function ReportCard({ user, db, term }: { user: User; db: DB; term?: string }) {
         </div>
         <div className="rounded-3xl bg-grape-soft p-6 text-center">
           <div className="text-5xl">🎖️</div>
-          <div className="font-display text-5xl font-bold">{ord(position)}</div>
-          <div className="font-semibold">in class of {classmates.length}</div>
+          <div className="font-display text-5xl font-bold">{ordinal(position)}</div>
+          <div className="font-semibold">in class of {classSize}</div>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">

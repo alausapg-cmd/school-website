@@ -5,9 +5,11 @@ import { getDB } from "@/lib/db";
 import { formatDate, today } from "@/lib/format";
 import { starsFor } from "@/lib/grades";
 import { resetDemo } from "./actions";
+import { FEE_STATE, feeStatus, naira } from "@/lib/fees";
+import { reportFor } from "@/lib/report";
 import { school } from "@/lib/school";
-import { classIdsFor, lookups } from "@/lib/scope";
-import type { DB, User } from "@/lib/types";
+import { childrenOf, classIdsFor, lookups, noticesFor } from "@/lib/scope";
+import type { DB, Notice, User } from "@/lib/types";
 
 function greeting() {
   const h = new Date().getHours();
@@ -19,6 +21,7 @@ export default async function Dashboard() {
   const db = await getDB();
   if (user.role === "student") return <StudentHome user={user} db={db} />;
   if (user.role === "teacher") return <TeacherHome user={user} db={db} />;
+  if (user.role === "parent") return <ParentHome user={user} db={db} />;
   return <AdminHome db={db} />;
 }
 
@@ -130,7 +133,7 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
     <div className="space-y-8">
       <div>
         <h1 className="page-title">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} {user.avatar}</h1>
-        <p className="text-ink/60">{school.currentTerm}, {school.currentSession} · {classIds.map((c) => klass(c)?.name).join(", ")}</p>
+        <p className="text-ink/60">{db.settings.term}, {db.settings.session} · {classIds.map((c) => klass(c)?.name).join(", ")}</p>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="🧒" value={pupils} label="Pupils in my classes" bg="bg-sky-soft" />
@@ -179,29 +182,141 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
   );
 }
 
+function NoticeList({ notices, db }: { notices: Notice[]; db: DB }) {
+  const { user: who } = lookups(db);
+  if (!notices.length) return <Empty emoji="📭" text="No notices right now." />;
+  return (
+    <ul className="space-y-3">
+      {notices.map((n) => (
+        <li key={n.id} className="rounded-2xl bg-cream p-4">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-display font-semibold">{n.pinned ? "📌 " : ""}{n.title}</h3>
+            <span className="shrink-0 text-xs text-ink/50">{formatDate(n.date, { day: "numeric", month: "short" })}</span>
+          </div>
+          <p className="mt-1 line-clamp-2 text-sm text-ink/70">{n.body}</p>
+          <p className="mt-1 text-xs text-ink/50">{who(n.authorId)?.name}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function ParentHome({ user, db }: { user: User; db: DB }) {
+  const { klass } = lookups(db);
+  const kids = childrenOf(db, user);
+  return (
+    <div className="space-y-8">
+      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
+        <h1 className="text-4xl font-bold">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} 👋</h1>
+        <p className="mt-1 text-lg opacity-90">
+          {db.settings.term}, {db.settings.session}
+          {db.settings.termEnds ? ` · Term ends ${formatDate(db.settings.termEnds, { day: "numeric", month: "long" })}` : ""}
+        </p>
+      </div>
+      <section>
+        <h2 className="mb-4 text-2xl font-semibold">👧🏽 My children</h2>
+        {kids.length ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {kids.map((k) => {
+              const att = db.attendance.filter((r) => r.studentId === k.id);
+              const pct = att.length ? Math.round((att.filter((r) => r.status !== "absent").length / att.length) * 100) : 100;
+              const rep = reportFor(db, k);
+              const fee = feeStatus(db, k);
+              const hw = db.assignments.filter((a) => a.classId === k.classId).length;
+              const done = db.submissions.filter((x) => x.studentId === k.id).length;
+              return (
+                <div key={k.id} className="card space-y-4">
+                  <div className="flex items-center gap-4">
+                    <span className="grid h-16 w-16 place-items-center rounded-2xl bg-sun-soft text-4xl">{k.avatar}</span>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-semibold">{k.name}</h3>
+                      <p className="text-sm text-ink/60">{klass(k.classId!)?.name} · {k.boarding ? "Boarder" : "Day pupil"} · <span className="font-mono">{k.admissionNo}</span></p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="rounded-2xl bg-grass-soft p-3"><div className="font-display text-2xl font-bold">{pct}%</div><div className="text-xs font-semibold text-ink/60">Attendance</div></div>
+                    <div className="rounded-2xl bg-sky-soft p-3"><div className="font-display text-2xl font-bold">{rep.current ? `${rep.avg.toFixed(0)}%` : "–"}</div><div className="text-xs font-semibold text-ink/60">Last average</div></div>
+                    <div className="rounded-2xl bg-grape-soft p-3"><div className="font-display text-2xl font-bold">{done}/{hw}</div><div className="text-xs font-semibold text-ink/60">Homework done</div></div>
+                  </div>
+                  <div className="flex items-center justify-between rounded-2xl bg-cream p-3 text-sm">
+                    <span>School fees: <b>{fee.balance > 0 ? `${naira(fee.balance)} to pay` : naira(fee.paid)}</b></span>
+                    <span className={`chip ${FEE_STATE[fee.state].cls}`}>{FEE_STATE[fee.state].label}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href={`/portal/students/${k.id}`} className="btn-primary px-4 py-2 text-sm">Full profile</Link>
+                    {rep.current && <Link href={`/portal/report/${k.id}`} className="btn-ghost px-4 py-2 text-sm">🏆 Report card</Link>}
+                    <Link href="/portal/fees" className="btn-ghost px-4 py-2 text-sm">💳 Fees</Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <Empty emoji="👪" text="No children are linked to your account yet. Please contact the school office." />
+        )}
+      </section>
+      <section className="card">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">📢 Notices from school</h2>
+          <Link href="/portal/notices" className="font-display font-semibold text-sky">All notices →</Link>
+        </div>
+        <NoticeList notices={noticesFor(db, user).slice(0, 3)} db={db} />
+      </section>
+    </div>
+  );
+}
+
 function AdminHome({ db }: { db: DB }) {
   const count = (r: string) => db.users.filter((u) => u.role === r).length;
+  const pupils = db.users.filter((u) => u.role === "student");
+  const fees = pupils.map((p) => feeStatus(db, p));
+  const billed = fees.reduce((t, f) => t + f.billed, 0);
+  const paid = fees.reduce((t, f) => t + Math.min(f.paid, f.billed), 0);
+  const owing = fees.filter((f) => f.balance > 0).length;
+  const pending = db.applications.filter((a) => a.status === "pending" || a.status === "exam booked").length;
+  const boarders = pupils.filter((p) => p.boarding).length;
+  const todayRecords = db.attendance.filter((r) => r.date === today());
+  const inToday = todayRecords.filter((r) => r.status !== "absent").length;
+  const pct = billed ? Math.round((paid / billed) * 100) : 0;
   return (
     <div className="space-y-8">
       <div>
         <h1 className="page-title">School overview 👑</h1>
-        <p className="text-ink/60">{school.name} · {school.currentTerm}, {school.currentSession}</p>
+        <p className="text-ink/60">{school.name} · {db.settings.term}, {db.settings.session}</p>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Stat emoji="🧒" value={count("student")} label="Pupils" bg="bg-sky-soft" />
+        <Stat emoji="🧒" value={pupils.length} label={`Pupils (${boarders} boarders)`} bg="bg-sky-soft" />
         <Stat emoji="👩‍🏫" value={count("teacher")} label="Teachers" bg="bg-grass-soft" />
-        <Stat emoji="📰" value={db.news.length} label="News stories" bg="bg-coral-soft" />
-        <Stat emoji="🎉" value={db.events.filter((e) => e.date >= today()).length} label="Upcoming events" bg="bg-grape-soft" />
+        <Stat emoji="📝" value={pending} label="Admission applications open" bg="bg-sun-soft" />
+        <Stat emoji="✅" value={todayRecords.length ? `${inToday}/${todayRecords.length}` : "–"} label="In school today" bg="bg-grape-soft" />
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+      <section className="card">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 className="text-2xl font-semibold">💳 School fees this term</h2>
+            <p className="text-ink/60">{naira(paid)} collected of {naira(billed)} · {owing} pupils still owing</p>
+          </div>
+          <Link href="/portal/fees" className="btn-ghost px-4 py-2 text-sm">Open fees</Link>
+        </div>
+        <div className="mt-4 h-5 overflow-hidden rounded-full bg-cream">
+          <div className="h-full rounded-full bg-grass" style={{ width: `${pct}%` }} />
+        </div>
+        <p className="mt-1 text-right text-sm font-semibold">{pct}% collected</p>
+      </section>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {[
-          ["/portal/news", "📰", "Post school news", "Share stories on the public website."],
-          ["/portal/events", "🎉", "Add an event", "Let families know what's coming up."],
-          ["/portal/people", "👥", "Manage people", "Add teachers and pupils to the portal."],
+          ["/portal/students", "🧒", "Students", "Enrol pupils and view records."],
+          ["/portal/fees", "💳", "Record a payment", "Issue a receipt in seconds."],
+          ["/portal/admissions", "📝", "Admissions", "Review online applications."],
+          ["/portal/notices", "📢", "Send a notice", "Reach parents, pupils or staff."],
+          ["/portal/timetable", "🗓️", "Timetables", "Set each class's lessons."],
+          ["/portal/results", "🏆", "Results", "Enter and check scores."],
+          ["/portal/news", "📰", "Website news", "Post stories on the website."],
+          ["/portal/settings", "⚙️", "Settings", "Term, session, classes, subjects."],
         ].map(([href, e, t, d]) => (
           <Link key={href} href={href} className="card transition hover:-translate-y-1">
-            <div className="text-4xl">{e}</div>
-            <h3 className="mt-2 text-xl font-semibold">{t}</h3>
+            <div className="text-3xl">{e}</div>
+            <h3 className="mt-2 text-lg font-semibold">{t}</h3>
             <p className="text-sm text-ink/60">{d}</p>
           </Link>
         ))}

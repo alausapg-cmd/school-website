@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { mutate, resetDB } from "@/lib/db";
 import { saveUpload } from "@/lib/files";
 import { newId, today } from "@/lib/format";
-import type { AttendanceStatus, Question, User } from "@/lib/types";
+import type { ApplicationStatus, AttendanceStatus, Audience, DB, PaymentMethod, Question, User } from "@/lib/types";
 
 const str = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
 const num = (f: FormData, k: string) => Number(f.get(k) ?? 0);
@@ -246,18 +246,22 @@ export async function deleteEvent(id: string) {
 
 export async function createPerson(formData: FormData) {
   await requireUser("admin");
-  const role = str(formData, "role") === "teacher" ? "teacher" : "student";
+  const roleIn = str(formData, "role");
+  const role = roleIn === "teacher" ? "teacher" : roleIn === "parent" ? "parent" : "student";
   const email = str(formData, "email").toLowerCase();
   const result = await mutate((db) => {
     if (db.users.some((u) => u.email === email)) return "That email is already in use.";
     db.users.push({
-      id: newId(role === "teacher" ? "tch" : "stu"),
+      id: newId(role === "teacher" ? "tch" : role === "parent" ? "par" : "stu"),
       name: str(formData, "name"),
       email,
       password: str(formData, "password") || "lifebuilders",
       role,
-      avatar: role === "teacher" ? "🍎" : ["🐣", "🐢", "🦒", "🐧", "🐻"][db.users.length % 5],
-      ...(role === "student"
+      avatar: role === "teacher" ? "🍎" : role === "parent" ? "👪" : ["🐣", "🐢", "🦒", "🐧", "🐻"][db.users.length % 5],
+      phone: str(formData, "phone") || undefined,
+      ...(role === "parent"
+        ? {}
+        : role === "student"
         ? { classId: str(formData, "classId") }
         : { classIds: formData.getAll("classIds").map(String), subjectIds: formData.getAll("subjectIds").map(String) }),
     });
@@ -271,4 +275,220 @@ export async function resetDemo() {
   await requireUser("admin");
   await resetDB();
   revalidatePath("/", "layout");
+}
+
+/* ---------- Students (admin) ---------- */
+
+function nextAdmissionNo(db: DB) {
+  const year = new Date().getFullYear();
+  const n = db.users.filter((u) => u.admissionNo?.includes(`/${year}/`)).length + 1;
+  return `LBIS/${year}/${String(n).padStart(3, "0")}`;
+}
+
+export async function createStudent(formData: FormData) {
+  await requireUser("admin");
+  const id = await mutate((db) => {
+    let parentId = str(formData, "parentId");
+    if (parentId === "new") {
+      const email = str(formData, "parentEmail").toLowerCase();
+      const existing = db.users.find((u) => u.email === email && u.role === "parent");
+      if (existing) parentId = existing.id;
+      else {
+        parentId = newId("par");
+        db.users.push({
+          id: parentId,
+          name: str(formData, "parentName") || "Parent",
+          email: email || `${parentId}@lifebuilders.test`,
+          phone: str(formData, "parentPhone"),
+          password: "lifebuilders",
+          role: "parent",
+          avatar: "👪",
+        });
+      }
+    }
+    const name = str(formData, "name");
+    const sid = newId("stu");
+    db.users.push({
+      id: sid,
+      name,
+      email: str(formData, "email").toLowerCase() || `${name.split(" ")[0].toLowerCase()}.${sid.slice(-4)}@lifebuilders.test`,
+      password: "lifebuilders",
+      role: "student",
+      avatar: ["🐣", "🐢", "🦒", "🐧", "🐻", "🦓"][db.users.length % 6],
+      classId: str(formData, "classId"),
+      gender: str(formData, "gender") === "Male" ? "Male" : "Female",
+      dob: str(formData, "dob"),
+      boarding: str(formData, "boarding") === "yes",
+      parentId: parentId || undefined,
+      admissionNo: nextAdmissionNo(db),
+      admittedOn: today(),
+      address: str(formData, "address"),
+    });
+    return sid;
+  });
+  revalidatePath("/portal/students");
+  redirect(`/portal/students/${id}?added=1`);
+}
+
+export async function updateStudent(id: string, formData: FormData) {
+  await requireUser("admin");
+  await mutate((db) => {
+    const s = db.users.find((u) => u.id === id && u.role === "student");
+    if (!s) throw new Error("Student not found");
+    s.name = str(formData, "name") || s.name;
+    s.classId = str(formData, "classId") || s.classId;
+    s.gender = str(formData, "gender") === "Male" ? "Male" : "Female";
+    s.dob = str(formData, "dob");
+    s.boarding = str(formData, "boarding") === "yes";
+    s.address = str(formData, "address");
+  });
+  revalidatePath(`/portal/students/${id}`);
+  redirect(`/portal/students/${id}?saved=1`);
+}
+
+/* ---------- Fees ---------- */
+
+export async function recordPayment(formData: FormData) {
+  const admin = await requireUser("admin");
+  const studentId = str(formData, "studentId");
+  const amount = Math.round(num(formData, "amount"));
+  if (!studentId || amount <= 0) redirect(`/portal/fees?error=${encodeURIComponent("Choose a pupil and enter an amount above zero.")}`);
+  const id = await mutate((db) => {
+    const n = db.payments.length + 1;
+    const pid = newId("pay");
+    db.payments.push({
+      id: pid,
+      receiptNo: `LB-${String(n).padStart(5, "0")}`,
+      studentId,
+      term: db.settings.term,
+      session: db.settings.session,
+      amount,
+      method: (["Cash", "Bank transfer", "POS", "Online"].includes(str(formData, "method")) ? str(formData, "method") : "Cash") as PaymentMethod,
+      reference: str(formData, "reference"),
+      date: str(formData, "date") || today(),
+      receivedBy: admin.id,
+    });
+    return pid;
+  });
+  revalidatePath("/portal/fees");
+  redirect(`/portal/fees/receipt/${id}?new=1`);
+}
+
+export async function saveFeeItem(formData: FormData) {
+  await requireUser("admin");
+  await mutate((db) => {
+    db.feeItems.push({
+      id: newId("fee"),
+      name: str(formData, "name") || "Fee",
+      amount: Math.max(0, Math.round(num(formData, "amount"))),
+      classId: str(formData, "classId") || "all",
+      term: db.settings.term,
+      session: db.settings.session,
+      boardingOnly: str(formData, "boardingOnly") === "yes",
+    });
+  });
+  revalidatePath("/portal/fees");
+}
+
+export async function deleteFeeItem(id: string) {
+  await requireUser("admin");
+  await mutate((db) => {
+    db.feeItems = db.feeItems.filter((f) => f.id !== id);
+  });
+  revalidatePath("/portal/fees");
+}
+
+/* ---------- Notice board ---------- */
+
+export async function createNotice(formData: FormData) {
+  const user = await requireUser("admin", "teacher");
+  const wanted = str(formData, "audience") as Audience;
+  const allowed: Audience[] = user.role === "admin" ? ["everyone", "staff", "parents", "students"] : ["students", "parents", "everyone"];
+  await mutate((db) => {
+    db.notices.push({
+      id: newId("ntc"),
+      title: str(formData, "title"),
+      body: str(formData, "body"),
+      audience: allowed.includes(wanted) ? wanted : "everyone",
+      date: new Date().toISOString(),
+      authorId: user.id,
+      pinned: user.role === "admin" && str(formData, "pinned") === "yes",
+    });
+  });
+  revalidatePath("/portal/notices");
+}
+
+export async function deleteNotice(id: string) {
+  const user = await requireUser("admin", "teacher");
+  await mutate((db) => {
+    db.notices = db.notices.filter((n) => !(n.id === id && (user.role === "admin" || n.authorId === user.id)));
+  });
+  revalidatePath("/portal/notices");
+}
+
+/* ---------- Timetable ---------- */
+
+export async function saveTimetable(classId: string, formData: FormData) {
+  await requireUser("admin");
+  await mutate((db) => {
+    db.timetable = db.timetable.filter((t) => t.classId !== classId);
+    for (const [key, value] of formData.entries()) {
+      const m = /^slot_(\d)_(\d)$/.exec(key);
+      if (m && typeof value === "string" && value) db.timetable.push({ classId, day: Number(m[1]), period: Number(m[2]), subjectId: value });
+    }
+  });
+  revalidatePath("/portal/timetable");
+  redirect(`/portal/timetable?class=${classId}&saved=1`);
+}
+
+/* ---------- Admissions ---------- */
+
+export async function updateApplication(id: string, formData: FormData) {
+  await requireUser("admin");
+  const status = str(formData, "status") as ApplicationStatus;
+  await mutate((db) => {
+    const a = db.applications.find((x) => x.id === id);
+    if (!a) throw new Error("Application not found");
+    if (["pending", "exam booked", "admitted", "declined"].includes(status)) a.status = status;
+    a.note = str(formData, "note");
+  });
+  revalidatePath("/portal/admissions");
+}
+
+/* ---------- Settings ---------- */
+
+export async function saveSettings(formData: FormData) {
+  await requireUser("admin");
+  await mutate((db) => {
+    const session = str(formData, "session");
+    db.settings = {
+      term: ["First Term", "Second Term", "Third Term"].includes(str(formData, "term")) ? str(formData, "term") : db.settings.term,
+      session: /^\d{4}\/\d{4}$/.test(session) ? session : db.settings.session,
+      termStarts: str(formData, "termStarts"),
+      termEnds: str(formData, "termEnds"),
+      nextTermBegins: str(formData, "nextTermBegins"),
+    };
+  });
+  revalidatePath("/portal", "layout");
+  redirect("/portal/settings?saved=1");
+}
+
+export async function addClass(formData: FormData) {
+  await requireUser("admin");
+  const name = str(formData, "name");
+  if (!name) return;
+  await mutate((db) => {
+    db.classes.push({ id: newId("cls"), name, emoji: str(formData, "emoji") || "📘" });
+  });
+  revalidatePath("/portal/settings");
+}
+
+export async function addSubject(formData: FormData) {
+  await requireUser("admin");
+  const name = str(formData, "name");
+  if (!name) return;
+  await mutate((db) => {
+    db.subjects.push({ id: newId("sub"), name, emoji: str(formData, "emoji") || "📘", color: COLORS[db.subjects.length % COLORS.length] });
+  });
+  revalidatePath("/portal/settings");
 }
