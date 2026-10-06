@@ -1,22 +1,30 @@
 @import "tailwindcss";
 
+/* Doodlebrook: a sketchbook drawn with crayons and a soft graphite pencil. */
 @theme {
-  --color-sun: #F5B800;
-  --color-sun-soft: #FFF4CC;
-  --color-sky: #157A3C;
-  --color-sky-soft: #DDF2E3;
-  --color-grass: #6DB33F;
-  --color-grass-soft: #EAF6DC;
-  --color-coral: #D7263D;
-  --color-coral-soft: #FCE3E6;
-  --color-grape: #2E7DC4;
-  --color-grape-soft: #DFEEFB;
-  --color-ink: #13291C;
-  --color-cream: #F7FAF1;
-  --font-display: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
-  --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+  --color-sun: #FFC83D;
+  --color-sun-soft: #FFF2BF;
+  --color-sky: #1F5FC4;
+  --color-sky-soft: #DFEBFF;
+  --color-grass: #1C7A44;
+  --color-grass-soft: #DBF3E2;
+  --color-coral: #C9252E;
+  --color-coral-soft: #FFE2DE;
+  --color-grape: #6B3FC0;
+  --color-grape-soft: #ECE3FF;
+  --color-ink: #2A2B33;
+  --color-cream: #FFFCF3;
+  --color-paper: #FFFEF9;
+  --color-rule: #C9DAF2;
+  --color-margin: #F2A5A5;
+  --font-display: var(--font-kalam), "Comic Sans MS", ui-rounded, system-ui, sans-serif;
+  --font-scribble: var(--font-caveat), var(--font-kalam), cursive;
+  --font-sans: var(--font-lexend), ui-rounded, system-ui, sans-serif;
   --animate-float: float 6s ease-in-out infinite;
   --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-bob: bob 3.2s ease-in-out infinite;
+  --animate-spin-slow: spin 28s linear infinite;
+  --animate-fly: fly 9s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -28,48 +36,205 @@
   25% { transform: rotate(-6deg); }
   75% { transform: rotate(6deg); }
 }
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+@keyframes fly {
+  0% { transform: translate(0, 0) rotate(-6deg); }
+  25% { transform: translate(18px, -14px) rotate(4deg); }
+  50% { transform: translate(36px, 0) rotate(-2deg); }
+  75% { transform: translate(14px, 10px) rotate(6deg); }
+  100% { transform: translate(0, 0) rotate(-6deg); }
+}
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-18deg); }
+}
+@keyframes draw {
+  from { stroke-dashoffset: var(--len, 600); }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.6) rotate(-8deg); }
+  to { opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  background: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  /* Faint graph-paper grid, like a page from a school sketchbook. */
+  background-image:
+    linear-gradient(to right, rgb(31 95 196 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(31 95 196 / 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.15;
+}
+
+::selection {
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 3px dashed var(--color-sky);
+  outline-offset: 3px;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- hand-drawn shapes ---------- */
+
+/* An uneven, hand-drawn looking corner shape. */
+@utility wobbly {
+  border-radius: 18px 7px 20px 9px / 9px 20px 7px 18px;
+}
+@utility wobbly-lg {
+  border-radius: 34px 12px 38px 14px / 14px 36px 12px 32px;
+}
+@utility wobbly-pill {
+  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+}
+@utility sketch {
+  border: 2px solid var(--color-ink);
+  border-radius: 18px 7px 20px 9px / 9px 20px 7px 18px;
+}
+@utility pencil-shadow {
+  box-shadow: 4px 5px 0 rgb(42 43 51 / 0.85);
 }
 
 @utility card {
-  @apply rounded-3xl bg-white p-6 shadow-[0_6px_0_rgba(31,42,68,0.08)] ring-2 ring-ink/5;
+  @apply bg-paper p-6;
+  border: 2px solid var(--color-ink);
+  border-radius: 18px 7px 20px 9px / 9px 20px 7px 18px;
+  box-shadow: 4px 5px 0 rgb(42 43 51 / 0.14);
 }
+
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-display text-base font-semibold transition active:translate-y-0.5 disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 font-display text-[1.05rem] font-bold leading-tight transition hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-50;
+  border: 2px solid var(--color-ink);
+  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow: 3px 3px 0 var(--color-ink);
+  &:active {
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
 }
 @utility btn-primary {
-  @apply btn bg-sky text-white shadow-[0_4px_0_#0d5527] hover:bg-sky/90;
+  @apply btn bg-sky text-white hover:bg-[#1a52ab];
 }
 @utility btn-sun {
-  @apply btn bg-sun text-ink shadow-[0_4px_0_#c99700] hover:brightness-105;
+  @apply btn bg-sun text-ink hover:bg-[#ffd25e];
 }
 @utility btn-grass {
-  @apply btn bg-grass text-white shadow-[0_4px_0_#4f8a2a] hover:brightness-105;
+  @apply btn bg-grass text-white hover:bg-[#186a3b];
 }
 @utility btn-ghost {
-  @apply btn bg-white text-ink ring-2 ring-ink/10 hover:bg-ink/5;
+  @apply btn bg-paper text-ink hover:bg-sun-soft;
 }
 @utility btn-danger {
   @apply btn bg-coral-soft text-coral hover:bg-coral hover:text-white;
 }
 @utility input {
-  @apply w-full rounded-2xl border-2 border-ink/10 bg-white px-4 py-2.5 text-ink outline-none transition focus:border-sky focus:ring-4 focus:ring-sky/20;
+  @apply w-full bg-white px-4 py-2.5 text-ink outline-none transition placeholder:text-ink/40 focus:border-sky focus:ring-4 focus:ring-sun/60;
+  border: 2px solid rgb(42 43 51 / 0.7);
+  border-radius: 14px 5px 16px 6px / 6px 16px 5px 14px;
 }
 @utility label {
-  @apply mb-1.5 block font-display text-sm font-semibold text-ink/80;
+  @apply mb-1.5 block font-display text-[0.95rem] font-bold text-ink/85;
 }
 @utility chip {
   @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold;
 }
 @utility page-title {
-  @apply font-display text-3xl font-bold sm:text-4xl;
+  @apply font-display text-3xl font-bold sm:text-[2.6rem];
+}
+
+/* ---------- sketchbook bits ---------- */
+
+/* A strip of washi tape stuck across the top edge of its parent. */
+@utility tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 92px;
+  height: 26px;
+  translate: -50% 0;
+  rotate: -4deg;
+  background: repeating-linear-gradient(45deg, rgb(255 255 255 / 0.35) 0 6px, transparent 6px 12px), rgb(255 200 61 / 0.85);
+  clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 2% 96%, 0 50%);
+  pointer-events: none;
+}
+
+/* A square sticky note. */
+@utility sticky-note {
+  position: relative;
+  padding: 1.25rem 1.1rem 1.1rem;
+  border-radius: 3px 3px 22px 3px;
+  box-shadow: 0 10px 14px -10px rgb(42 43 51 / 0.45), inset 0 -2px 0 rgb(0 0 0 / 0.04);
+}
+
+/* Lined notebook paper with a red margin. */
+@utility lined {
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(to right, transparent 46px, var(--color-margin) 46px, var(--color-margin) 48px, transparent 48px),
+    repeating-linear-gradient(to bottom, transparent 0 31px, var(--color-rule) 31px 32px);
+}
+
+/* A crayon highlighter swipe behind text. */
+@utility highlight {
+  background-image: linear-gradient(100deg, transparent 2%, var(--hl, var(--color-sun)) 4%, var(--hl, var(--color-sun)) 94%, transparent 97%);
+  background-size: 100% 46%;
+  background-position: 0 88%;
+  background-repeat: no-repeat;
+  padding-inline: 0.15em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* An SVG line that draws itself in. */
+@utility draw-in {
+  stroke-dasharray: var(--len, 600);
+  stroke-dashoffset: var(--len, 600);
+  animation: draw 1.4s 0.35s ease-out forwards;
+}
+@utility pop-in {
+  animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Spiral binding down the left edge of a notebook. */
+@utility spiral {
+  background-image: radial-gradient(circle at 50% 50%, var(--color-cream) 0 5px, var(--color-ink) 5px 7px, transparent 7.5px);
+  background-size: 22px 30px;
+  background-repeat: repeat-y;
+}
+
+@utility polaroid {
+  @apply bg-white p-3 pb-4;
+  box-shadow: 0 2px 0 rgb(42 43 51 / 0.08), 0 14px 26px -14px rgb(42 43 51 / 0.5);
+  border: 1px solid rgb(42 43 51 / 0.12);
 }

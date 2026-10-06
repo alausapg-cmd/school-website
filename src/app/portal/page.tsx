@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Pip } from "@/components/Doodles";
 import { Empty, Stars, Stat, SubjectChip } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { getDB } from "@/lib/db";
@@ -14,6 +15,20 @@ import type { DB, Notice, User } from "@/lib/types";
 function greeting() {
   const h = new Date().getHours();
   return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+}
+
+// A lined notebook page with Pip saying hello.
+function Greeting({ title, text, avatar }: { title: string; text: string; avatar?: string }) {
+  return (
+    <div className="lined relative overflow-hidden wobbly-lg border-2 border-ink py-5 pl-14 pr-24 shadow-[5px_6px_0_rgb(42_43_51/0.14)] sm:pl-20 sm:pr-48">
+      <span className="tape left-1/3" aria-hidden />
+      <p className="font-display text-sm font-bold uppercase leading-8 tracking-widest text-sky">Pip says…</p>
+      <h1 className="font-scribble text-[2.3rem] leading-[1] sm:text-6xl">{title}</h1>
+      <p className="mt-2 text-lg leading-8 text-ink/80">{text}</p>
+      {avatar && <span className="absolute right-24 top-5 hidden rotate-12 text-5xl sm:right-36 sm:block" aria-hidden>{avatar}</span>}
+      <Pip className="absolute -bottom-3 right-2 h-28 w-auto animate-bob sm:right-8 sm:h-44" />
+    </div>
+  );
 }
 
 export default async function Dashboard() {
@@ -42,11 +57,7 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
-        <div className="absolute -right-4 -top-6 text-[8rem] opacity-30" aria-hidden>{user.avatar}</div>
-        <h1 className="relative text-4xl font-bold">{greeting()}, {first}! 👋</h1>
-        <p className="relative mt-1 text-lg opacity-90">Ready for another awesome day of learning?</p>
-      </div>
+      <Greeting title={`${greeting()}, ${first}!`} text="Ready for another awesome day of learning? Grab your crayons!" avatar={user.avatar} />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="⭐" value={stars} label="Stars collected" bg="bg-sun-soft" />
         <Stat emoji="✍️" value={due.length} label="Homework to do" bg="bg-coral-soft" />
@@ -55,14 +66,14 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="card">
-          <h2 className="mb-4 text-2xl font-semibold">✍️ Homework to do</h2>
+          <h2 className="mb-4 text-3xl">✍️ Homework to do</h2>
           {due.length ? (
             <ul className="space-y-3">
               {due.map((a) => {
                 const late = a.dueDate < today();
                 return (
                   <li key={a.id}>
-                    <Link href={`/portal/assignments/${a.id}`} className="flex items-center justify-between gap-3 rounded-2xl bg-cream p-4 transition hover:bg-sky-soft">
+                    <Link href={`/portal/assignments/${a.id}`} className="flex items-center justify-between gap-3 wobbly border-2 border-ink/15 bg-cream p-4 transition hover:border-ink hover:bg-sky-soft">
                       <div>
                         <div className="font-display font-semibold">{a.title}</div>
                         <SubjectChip subject={subject(a.subjectId)} />
@@ -80,12 +91,12 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
           )}
         </section>
         <section className="card">
-          <h2 className="mb-4 text-2xl font-semibold">🧠 Quizzes waiting for you</h2>
+          <h2 className="mb-4 text-3xl">🧠 Quizzes waiting for you</h2>
           {quizzes.length ? (
             <ul className="space-y-3">
               {quizzes.map((q) => (
                 <li key={q.id}>
-                  <Link href={`/portal/quizzes/${q.id}`} className="flex items-center justify-between gap-3 rounded-2xl bg-grape-soft p-4 transition hover:-translate-y-0.5">
+                  <Link href={`/portal/quizzes/${q.id}`} className="flex items-center justify-between gap-3 wobbly border-2 border-ink/15 bg-grape-soft p-4 transition hover:-translate-y-0.5 hover:border-ink">
                     <div>
                       <div className="font-display font-semibold">{q.title}</div>
                       <div className="text-sm text-ink/60">{q.questions.length} questions</div>
@@ -106,7 +117,7 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
         </section>
       </div>
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">📒 New notes from your teachers</h2>
+        <h2 className="mb-4 text-3xl">📒 New notes from your teachers</h2>
         <div className="grid gap-4 md:grid-cols-3">
           {notes.map((n) => (
             <Link key={n.id} href={`/portal/notes/${n.id}`} className="card transition hover:-translate-y-1">
@@ -131,10 +142,11 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} {user.avatar}</h1>
-        <p className="text-ink/60">{db.settings.term}, {db.settings.session} · {classIds.map((c) => klass(c)?.name).join(", ")}</p>
-      </div>
+      <Greeting
+        title={`${greeting()}, ${user.name.split(" ").slice(0, 2).join(" ")}!`}
+        text={`${db.settings.term}, ${db.settings.session} · ${classIds.map((c) => klass(c)?.name).join(", ")}`}
+        avatar={user.avatar}
+      />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="🧒" value={pupils} label="Pupils in my classes" bg="bg-sky-soft" />
         <Stat emoji="📝" value={toMark.length} label="Submissions to mark" bg="bg-coral-soft" />
@@ -142,15 +154,15 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
         <Stat emoji="📅" value={`${takenToday.length}/${classIds.length}`} label="Registers taken today" bg="bg-grass-soft" />
       </div>
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">⚡ Quick actions</h2>
+        <h2 className="mb-4 text-3xl">⚡ Quick actions</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
-            ["/portal/notes#new", "📤", "Upload notes", "bg-sun"],
-            ["/portal/assignments#new", "✍️", "Set homework", "bg-coral"],
-            ["/portal/quizzes/new", "🧠", "Build a quiz", "bg-grape"],
-            ["/portal/attendance", "✅", "Take register", "bg-grass"],
+            ["/portal/notes#new", "📤", "Upload notes", "bg-sun text-ink"],
+            ["/portal/assignments#new", "✍️", "Set homework", "bg-coral text-white"],
+            ["/portal/quizzes/new", "🧠", "Build a quiz", "bg-grape text-white"],
+            ["/portal/attendance", "✅", "Take register", "bg-grass text-white"],
           ].map(([href, e, t, bg]) => (
-            <Link key={href} href={href} className={`${bg} rounded-3xl p-5 text-white transition hover:-translate-y-1 hover:rotate-1`}>
+            <Link key={href} href={href} className={`${bg} wobbly border-2 border-ink p-5 shadow-[4px_4px_0_var(--color-ink)] transition hover:-translate-y-1 hover:rotate-1`}>
               <div className="text-4xl">{e}</div>
               <div className="mt-2 font-display text-lg font-semibold">{t}</div>
             </Link>
@@ -158,7 +170,7 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
         </div>
       </section>
       <section className="card">
-        <h2 className="mb-4 text-2xl font-semibold">📝 Waiting to be marked</h2>
+        <h2 className="mb-4 text-3xl">📝 Waiting to be marked</h2>
         {toMark.length ? (
           <ul className="divide-y-2 divide-ink/5">
             {toMark.map((s) => {
@@ -188,7 +200,7 @@ function NoticeList({ notices, db }: { notices: Notice[]; db: DB }) {
   return (
     <ul className="space-y-3">
       {notices.map((n) => (
-        <li key={n.id} className="rounded-2xl bg-cream p-4">
+        <li key={n.id} className="wobbly border-2 border-ink/15 bg-[#FFF8DB] p-4">
           <div className="flex items-center justify-between gap-2">
             <h3 className="font-display font-semibold">{n.pinned ? "📌 " : ""}{n.title}</h3>
             <span className="shrink-0 text-xs text-ink/50">{formatDate(n.date, { day: "numeric", month: "short" })}</span>
@@ -206,15 +218,12 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
   const kids = childrenOf(db, user);
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
-        <h1 className="text-4xl font-bold">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} 👋</h1>
-        <p className="mt-1 text-lg opacity-90">
-          {db.settings.term}, {db.settings.session}
-          {db.settings.termEnds ? ` · Term ends ${formatDate(db.settings.termEnds, { day: "numeric", month: "long" })}` : ""}
-        </p>
-      </div>
+      <Greeting
+        title={`${greeting()}, ${user.name.split(" ").slice(0, 2).join(" ")}!`}
+        text={`${db.settings.term}, ${db.settings.session}${db.settings.termEnds ? ` · Term ends ${formatDate(db.settings.termEnds, { day: "numeric", month: "long" })}` : ""}`}
+      />
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">👧🏽 My children</h2>
+        <h2 className="mb-4 text-3xl">👧🏽 My children</h2>
         {kids.length ? (
           <div className="grid gap-4 md:grid-cols-2">
             {kids.map((k) => {
@@ -227,18 +236,18 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
               return (
                 <div key={k.id} className="card space-y-4">
                   <div className="flex items-center gap-4">
-                    <span className="grid h-16 w-16 place-items-center rounded-2xl bg-sun-soft text-4xl">{k.avatar}</span>
+                    <span className="grid h-16 w-16 -rotate-3 place-items-center rounded-full border-2 border-ink bg-sun-soft text-4xl">{k.avatar}</span>
                     <div className="min-w-0">
                       <h3 className="text-xl font-semibold">{k.name}</h3>
-                      <p className="text-sm text-ink/60">{klass(k.classId!)?.name} · {k.boarding ? "Boarder" : "Day pupil"} · <span className="font-mono">{k.admissionNo}</span></p>
+                      <p className="text-sm text-ink/60">{klass(k.classId!)?.name} · <span className="font-mono">{k.admissionNo}</span></p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="rounded-2xl bg-grass-soft p-3"><div className="font-display text-2xl font-bold">{pct}%</div><div className="text-xs font-semibold text-ink/60">Attendance</div></div>
-                    <div className="rounded-2xl bg-sky-soft p-3"><div className="font-display text-2xl font-bold">{rep.current ? `${rep.avg.toFixed(0)}%` : "–"}</div><div className="text-xs font-semibold text-ink/60">Last average</div></div>
-                    <div className="rounded-2xl bg-grape-soft p-3"><div className="font-display text-2xl font-bold">{done}/{hw}</div><div className="text-xs font-semibold text-ink/60">Homework done</div></div>
+                    <div className="wobbly bg-grass-soft p-3"><div className="font-display text-2xl font-bold">{pct}%</div><div className="text-xs font-semibold text-ink/60">Attendance</div></div>
+                    <div className="wobbly bg-sky-soft p-3"><div className="font-display text-2xl font-bold">{rep.current ? `${rep.avg.toFixed(0)}%` : "–"}</div><div className="text-xs font-semibold text-ink/60">Last average</div></div>
+                    <div className="wobbly bg-grape-soft p-3"><div className="font-display text-2xl font-bold">{done}/{hw}</div><div className="text-xs font-semibold text-ink/60">Homework done</div></div>
                   </div>
-                  <div className="flex items-center justify-between rounded-2xl bg-cream p-3 text-sm">
+                  <div className="flex items-center justify-between gap-2 wobbly border-2 border-dashed border-ink/25 bg-cream p-3 text-sm">
                     <span>School fees: <b>{fee.balance > 0 ? `${naira(fee.balance)} to pay` : naira(fee.paid)}</b></span>
                     <span className={`chip ${FEE_STATE[fee.state].cls}`}>{FEE_STATE[fee.state].label}</span>
                   </div>
@@ -257,7 +266,7 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
       </section>
       <section className="card">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">📢 Notices from school</h2>
+          <h2 className="text-3xl">📢 Notices from school</h2>
           <Link href="/portal/notices" className="font-display font-semibold text-sky">All notices →</Link>
         </div>
         <NoticeList notices={noticesFor(db, user).slice(0, 3)} db={db} />
@@ -274,18 +283,14 @@ function AdminHome({ db }: { db: DB }) {
   const paid = fees.reduce((t, f) => t + Math.min(f.paid, f.billed), 0);
   const owing = fees.filter((f) => f.balance > 0).length;
   const pending = db.applications.filter((a) => a.status === "pending" || a.status === "exam booked").length;
-  const boarders = pupils.filter((p) => p.boarding).length;
   const todayRecords = db.attendance.filter((r) => r.date === today());
   const inToday = todayRecords.filter((r) => r.status !== "absent").length;
   const pct = billed ? Math.round((paid / billed) * 100) : 0;
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">School overview 👑</h1>
-        <p className="text-ink/60">{school.name} · {db.settings.term}, {db.settings.session}</p>
-      </div>
+      <Greeting title="School overview" text={`${school.name} · ${db.settings.term}, ${db.settings.session}`} avatar="👑" />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Stat emoji="🧒" value={pupils.length} label={`Pupils (${boarders} boarders)`} bg="bg-sky-soft" />
+        <Stat emoji="🧒" value={pupils.length} label="Pupils on roll" bg="bg-sky-soft" />
         <Stat emoji="👩‍🏫" value={count("teacher")} label="Teachers" bg="bg-grass-soft" />
         <Stat emoji="📝" value={pending} label="Admission applications open" bg="bg-sun-soft" />
         <Stat emoji="✅" value={todayRecords.length ? `${inToday}/${todayRecords.length}` : "–"} label="In school today" bg="bg-grape-soft" />
@@ -293,13 +298,13 @@ function AdminHome({ db }: { db: DB }) {
       <section className="card">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h2 className="text-2xl font-semibold">💳 School fees this term</h2>
+            <h2 className="text-3xl">💳 School fees this term</h2>
             <p className="text-ink/60">{naira(paid)} collected of {naira(billed)} · {owing} pupils still owing</p>
           </div>
           <Link href="/portal/fees" className="btn-ghost px-4 py-2 text-sm">Open fees</Link>
         </div>
-        <div className="mt-4 h-5 overflow-hidden rounded-full bg-cream">
-          <div className="h-full rounded-full bg-grass" style={{ width: `${pct}%` }} />
+        <div className="mt-4 h-6 overflow-hidden wobbly-pill border-2 border-ink bg-cream">
+          <div className="h-full bg-grass" style={{ width: `${pct}%`, backgroundImage: "repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.25) 0 8px, transparent 8px 16px)" }} />
         </div>
         <p className="mt-1 text-right text-sm font-semibold">{pct}% collected</p>
       </section>
@@ -321,7 +326,7 @@ function AdminHome({ db }: { db: DB }) {
           </Link>
         ))}
       </div>
-      <form action={resetDemo} className="card flex flex-wrap items-center justify-between gap-4 bg-sun-soft">
+      <form action={resetDemo} className="card flex flex-wrap items-center justify-between gap-4 border-dashed bg-sun-soft">
         <div>
           <h3 className="text-lg font-semibold">🧪 Demo mode</h3>
           <p className="text-sm text-ink/70">This portal is running on sample data. Reset it to start the demo fresh.</p>

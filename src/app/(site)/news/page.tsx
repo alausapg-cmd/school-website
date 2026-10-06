@@ -9,9 +9,9 @@ export default async function NewsPage() {
   const news = [...db.news].sort((a, b) => b.date.localeCompare(a.date));
   return (
     <>
-      <PageHero emoji="📰" title="School news" text="Stories, celebrations and updates from around our school." color="bg-coral" />
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-12 md:grid-cols-3">
-        {news.map((n) => <NewsCard key={n.id} post={n} />)}
+      <PageHero emoji="📰" title="School news" text="Stories, celebrations and updates, hot off the classroom printer." tone="coral" pipSays="I wrote some of these myself!" />
+      <section className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-3">
+        {news.map((n, i) => <NewsCard key={n.id} post={n} i={i} />)}
       </section>
     </>
   );

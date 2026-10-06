@@ -5,10 +5,10 @@ import { school } from "@/lib/school";
 import { login } from "./actions";
 
 const demo = [
-  { label: "Pupil", who: "Zainab, Primary 4", email: `student@${school.demoDomain}`, emoji: "🦊", cls: "bg-sun-soft" },
-  { label: "Teacher", who: "Mrs Okafor", email: `teacher@${school.demoDomain}`, emoji: "🌻", cls: "bg-grass-soft" },
-  { label: "Parent", who: "Mrs Bello", email: `parent@${school.demoDomain}`, emoji: "👪", cls: "bg-sky-soft" },
-  { label: "Admin", who: "Head Teacher", email: `admin@${school.demoDomain}`, emoji: "👑", cls: "bg-grape-soft" },
+  { label: "Pupil", who: "Zainab, Primary 4", email: `student@${school.demoDomain}`, emoji: "🦊", bg: "#FFE98A", tilt: "-rotate-2" },
+  { label: "Teacher", who: "Mrs Okafor", email: `teacher@${school.demoDomain}`, emoji: "🌻", bg: "#BDEBC9", tilt: "rotate-1" },
+  { label: "Parent", who: "Mrs Bello", email: `parent@${school.demoDomain}`, emoji: "👪", bg: "#BFDBFF", tilt: "-rotate-1" },
+  { label: "Admin", who: "Head Teacher", email: `admin@${school.demoDomain}`, emoji: "👑", bg: "#DCCBFF", tilt: "rotate-2" },
 ];
 
 export function LoginForm() {
@@ -33,25 +33,26 @@ export function LoginForm() {
           <label className="label" htmlFor="password">Password</label>
           <input id="password" name="password" type="password" required className="input" />
         </div>
-        {error && <p className="rounded-2xl bg-coral-soft px-4 py-2 text-sm font-semibold text-coral">{error}</p>}
+        {error && <p className="wobbly border-2 border-coral bg-coral-soft px-4 py-2 text-sm font-semibold text-coral">{error}</p>}
         <button disabled={pending} className="btn-primary w-full text-lg">
-          {pending ? "Opening…" : "Let's go! 🚀"}
+          {pending ? "Opening…" : "Let's go! ✏️"}
         </button>
       </form>
       <div>
-        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: {school.demoPassword})</p>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <p className="mb-3 text-center font-scribble text-2xl text-ink/75">or tap a demo sticky note (password: <b>{school.demoPassword}</b>)</p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {demo.map((d) => (
             <button
               key={d.email}
               type="button"
               disabled={pending}
               onClick={() => quick(d.email)}
-              className={`rounded-2xl ${d.cls} p-3 text-center transition hover:-translate-y-0.5`}
+              style={{ background: d.bg }}
+              className={`sticky-note ${d.tilt} p-3! text-center transition hover:rotate-0 hover:-translate-y-0.5`}
             >
               <div className="text-3xl">{d.emoji}</div>
-              <div className="font-display font-semibold">{d.label}</div>
-              <div className="text-xs text-ink/60">{d.who}</div>
+              <div className="font-display text-lg font-bold leading-tight">{d.label}</div>
+              <div className="text-xs text-ink/70">{d.who}</div>
             </button>
           ))}
         </div>

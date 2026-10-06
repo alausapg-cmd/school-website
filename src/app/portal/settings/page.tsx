@@ -50,7 +50,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/portal/
             ))}
           </ul>
           <form action={addClass} className="flex flex-wrap items-end gap-3">
-            <div className="flex-1"><label className="label">New class name</label><input name="name" required className="input" placeholder="e.g. JSS 1 Wisdom" /></div>
+            <div className="flex-1"><label className="label">New class name</label><input name="name" required className="input" placeholder="e.g. Primary 3 Sketch" /></div>
             <div className="w-20"><label className="label">Emoji</label><input name="emoji" className="input" placeholder="📘" /></div>
             <SubmitButton className="btn-grass">Add class</SubmitButton>
           </form>

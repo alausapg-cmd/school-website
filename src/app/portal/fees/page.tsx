@@ -122,14 +122,13 @@ export default async function FeesPage({ searchParams }: PageProps<"/portal/fees
               ))}
             </tbody>
           </table>
-          <form action={saveFeeItem} className="mt-4 grid gap-2 rounded-2xl bg-cream p-3 sm:grid-cols-2">
+          <form action={saveFeeItem} className="mt-4 grid gap-2 wobbly border-2 border-dashed border-ink/25 bg-cream p-3 sm:grid-cols-2">
             <input name="name" required placeholder="Item, e.g. Excursion" className="input py-2" />
             <input name="amount" type="number" min={0} required placeholder="Amount (₦)" className="input py-2" />
             <select name="classId" className="input py-2">
               <option value="all">All classes</option>
               {db.classes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
-            <select name="boardingOnly" className="input py-2"><option value="no">Everyone</option><option value="yes">Boarders only</option></select>
             <SubmitButton className="btn-ghost sm:col-span-2">➕ Add fee item</SubmitButton>
           </form>
         </section>
@@ -172,7 +171,7 @@ function ParentFees({ user, db }: { user: User; db: DB }) {
         return (
           <section key={k.id} className="card">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-2xl font-semibold">{k.avatar} {k.name} <span className="text-base font-normal text-ink/50">· {klass(k.classId!)?.name}{k.boarding ? " · Boarder" : ""}</span></h2>
+              <h2 className="text-2xl font-semibold">{k.avatar} {k.name} <span className="text-base font-normal text-ink/50">· {klass(k.classId!)?.name}</span></h2>
               <span className={`chip ${FEE_STATE[f.state].cls}`}>{FEE_STATE[f.state].label}</span>
             </div>
             <div className="grid gap-6 md:grid-cols-2">

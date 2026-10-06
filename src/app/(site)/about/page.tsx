@@ -1,86 +1,102 @@
-import Image from "next/image";
+import { C, LogoMark, Pip, Scene, Squiggle } from "@/components/Doodles";
 import { PageHero } from "@/components/PageHero";
 import { school } from "@/lib/school";
 
 export const metadata = { title: "About us" };
 
 const values = [
-  { emoji: "✝️", title: "Godliness", text: "We honour God in our words, work and play." },
-  { emoji: "⭐", title: "Excellence", text: "We give our best in every subject and activity." },
-  { emoji: "⚖️", title: "Integrity", text: "Quality education without corruption, always." },
-  { emoji: "🦁", title: "Leadership", text: "We serve others and lead by good example." },
+  { emoji: "💡", title: "Curiosity", text: "We ask why, how and what if, every single day.", bg: "#FFE98A", tilt: "-rotate-2" },
+  { emoji: "🤝", title: "Kindness", text: "We share the crayons, take turns and look after each other.", bg: "#BFDBFF", tilt: "rotate-1" },
+  { emoji: "🌈", title: "Courage", text: "We try new things and learn that mistakes help us grow.", bg: "#BDEBC9", tilt: "-rotate-1" },
+  { emoji: "⭐", title: "Pride in our work", text: "We take our time, do our best and sign our name with a smile.", bg: "#FFC9C2", tilt: "rotate-2" },
+];
+
+const stages = [
+  { emoji: "🧸", name: "Creche", ages: "6 months to 2 years", text: "Cuddles, songs, messy play and gentle routines in a calm, safe room.", color: "border-coral" },
+  { emoji: "🖍️", name: "Nursery", ages: "2 to 5 years", text: "Phonics, counting, outdoor play and first marks on paper.", color: "border-sun" },
+  { emoji: "📐", name: "Primary", ages: "Primary 1 to 6", text: "Confident readers, writers and problem-solvers ready for secondary school.", color: "border-sky" },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <PageHero emoji="🏫" title="About our school" text={school.tagline} />
+      <PageHero emoji="🏫" title="About our school" text={school.tagline + ". Here's a peek inside our sketchbook."} tone="grass" pipSays="Hi! I'm Pip, the school pencil." />
 
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:grid-cols-2">
-        <div className="space-y-4 text-lg text-ink/80">
-          <h2 className="text-4xl font-bold text-ink">Who we are</h2>
+      <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 md:grid-cols-2">
+        <div className="space-y-4 text-lg leading-relaxed text-ink/85">
+          <h2 className="text-4xl text-ink">Who we are</h2>
           <p>
-            {school.name} is a Christian day and boarding school on Igbusi Road, Iyana Ilogbo, along the Lagos to Abeokuta Expressway in Ogun State.
+            {school.name} is a small, joyful creche, nursery and primary day school at {school.address}. We believe children learn best when they are busy with their hands, brave with their ideas and surrounded by grown-ups who cheer them on.
           </p>
           <p>
-            We are approved by the government and are a recognised centre for WAEC, NECO and BECE examinations. Our pupils grow in knowledge and in character, in a safe and caring environment.
+            Our classrooms are full of paint pots, building blocks, reading nooks and little gardens. Alongside the national curriculum, every child draws, makes, sings and plays every day.
           </p>
-          <div className="rounded-3xl bg-sky-soft p-5">
-            <p className="font-display text-sm font-semibold uppercase tracking-widest text-sky">Our mission</p>
-            <p className="mt-1 font-display text-2xl font-semibold text-ink">{school.mission}</p>
+          <div className="lined relative wobbly border-2 border-ink py-4 pl-16 pr-5">
+            <span className="tape" aria-hidden />
+            <p className="font-display text-sm font-bold uppercase leading-8 tracking-widest text-sky">Our mission</p>
+            <p className="font-scribble text-[1.9rem] leading-8 text-ink">{school.mission}</p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <Image src="/images/building.jpg" alt="Our school building" width={664} height={336} className="col-span-2 w-full rounded-3xl object-cover" />
-          <Image src="/images/pupils.jpg" alt="Pupils at assembly" width={226} height={258} className="h-48 w-full rounded-3xl object-cover" />
-          <Image src="/images/play.jpg" alt="Pupils at the playground" width={188} height={258} className="h-48 w-full rounded-3xl object-cover" />
+        <div className="relative mx-auto grid w-full max-w-md grid-cols-2 gap-5">
+          <figure className="polaroid col-span-2 -rotate-2">
+            <span className="tape" aria-hidden />
+            <Scene id="school" className="block h-auto w-full" />
+            <figcaption className="mt-2 text-center font-scribble text-2xl">Our little school</figcaption>
+          </figure>
+          <figure className="polaroid rotate-3">
+            <Scene id="reading" className="block h-auto w-full" />
+            <figcaption className="mt-2 text-center font-scribble text-xl">Reading corner</figcaption>
+          </figure>
+          <figure className="polaroid -rotate-1">
+            <Scene id="music" className="block h-auto w-full" />
+            <figcaption className="mt-2 text-center font-scribble text-xl">Music time</figcaption>
+          </figure>
         </div>
       </section>
 
-      <section className="bg-sun-soft py-14">
+      <section className="border-y-2 border-dashed border-ink/20 bg-sky-soft/50 py-14">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-4xl font-bold">Our values</h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((v) => (
-              <div key={v.title} className="card text-center">
-                <div className="text-5xl">{v.emoji}</div>
-                <h3 className="mt-2 text-2xl font-semibold">{v.title}</h3>
-                <p className="text-ink/70">{v.text}</p>
+          <h2 className="text-center text-4xl sm:text-5xl">From first steps to Primary 6</h2>
+          <Squiggle className="mx-auto mt-2 h-4 w-40" color={C.coral} />
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {stages.map((s) => (
+              <div key={s.name} className={`card border-[3px] ${s.color} text-center`}>
+                <div className="text-5xl">{s.emoji}</div>
+                <h3 className="mt-2 text-3xl">{s.name}</h3>
+                <p className="font-scribble text-2xl text-ink/70">{s.ages}</p>
+                <p className="mt-2 text-ink/80">{s.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-4 py-14">
-        <div className="card flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-          <Image src={school.logo} alt="" width={112} height={112} className="h-28 w-28 shrink-0 rounded-full ring-4 ring-sun" />
-          <div>
-            <h2 className="text-3xl font-bold">Our motto</h2>
-            <p className="mt-2 font-display text-2xl text-sky">&ldquo;{school.motto}&rdquo;</p>
-            <p className="mt-3 text-ink/80">
-              We believe every child is a gift from God with a purpose to fulfil. Our teachers combine sound teaching with Christian values, so that our pupils leave us as competent, honest and godly leaders, ready to build their nation.
-            </p>
-          </div>
+      <section className="mx-auto max-w-6xl px-4 py-14">
+        <h2 className="text-center text-4xl sm:text-5xl">Our values</h2>
+        <p className="mt-1 text-center font-scribble text-2xl text-ink/70">stuck on every classroom door</p>
+        <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-7 lg:grid-cols-4">
+          {values.map((v) => (
+            <div key={v.title} className={`sticky-note ${v.tilt} text-center`} style={{ background: v.bg }}>
+              <span className="tape w-16 bg-white/55!" aria-hidden />
+              <div className="text-5xl">{v.emoji}</div>
+              <h3 className="mt-2 text-2xl">{v.title}</h3>
+              <p className="text-sm text-ink/80 sm:text-base">{v.text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-16">
-        <h2 className="text-center text-4xl font-bold">School life</h2>
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {[
-            ["🏠", "Day and boarding"],
-            ["🙏", "Morning devotion"],
-            ["📖", "Classrooms for every level"],
-            ["⚽", "Sports and inter-house games"],
-            ["🎨", "Clubs and creative arts"],
-            ["🛝", "Children's playground"],
-          ].map(([e, t]) => (
-            <div key={t} className="card flex items-center gap-4">
-              <span className="text-4xl">{e}</span>
-              <span className="font-display text-lg font-semibold">{t}</span>
-            </div>
-          ))}
+      <section className="mx-auto max-w-4xl px-4 pb-16">
+        <div className="card flex flex-col items-center gap-6 p-8 sm:flex-row sm:items-center">
+          <LogoMark className="h-28 w-28 shrink-0 -rotate-6" />
+          <div className="flex-1">
+            <h2 className="text-3xl">Our motto</h2>
+            <p className="mt-1 font-scribble text-4xl text-coral">&ldquo;{school.motto}&rdquo;</p>
+            <p className="mt-3 text-ink/85">
+              Every child arrives with a blank page and a box of crayons. Our job is to give them time, tools and encouragement, so the picture they draw of themselves is bold, bright and entirely their own.
+            </p>
+          </div>
+          <Pip className="hidden h-32 w-auto sm:block" mood="wow" wave={false} />
         </div>
       </section>
     </>

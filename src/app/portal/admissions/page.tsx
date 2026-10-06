@@ -54,7 +54,7 @@ export default async function AdmissionsPage({ searchParams }: PageProps<"/porta
                 <div>
                   <h2 className="text-xl font-semibold">{a.childName}</h2>
                   <p className="text-sm text-ink/60">
-                    {a.gender}{a.dob ? `, born ${formatDate(a.dob)}` : ""} · For {a.classWanted || "any class"} · {a.boarding ? "Boarding" : "Day"}
+                    {a.gender}{a.dob ? `, born ${formatDate(a.dob)}` : ""} · For {a.classWanted || "any class"}
                   </p>
                 </div>
                 <span className={`chip ${STATUS[a.status].cls}`}>{STATUS[a.status].label}</span>

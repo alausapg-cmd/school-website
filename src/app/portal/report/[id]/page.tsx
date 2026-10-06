@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { LogoMark } from "@/components/Doodles";
 import { PrintButton } from "@/components/PrintButton";
 import { Empty } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
@@ -94,14 +94,17 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
         </div>
       </div>
 
-      <article className="card border-t-8 border-sky p-6 sm:p-8 print:p-0 print:shadow-none print:ring-0">
-        <header className="flex items-center gap-4 border-b-4 border-double border-sky/40 pb-4">
-          <Image src={school.logo} alt="" width={80} height={80} className="h-20 w-20 rounded-full" />
+      <article className="card relative overflow-hidden p-6 sm:p-8 print:overflow-visible print:rounded-none print:border-0 print:bg-white print:p-0 print:shadow-none">
+        <div className="absolute inset-x-0 top-0 flex h-2 print:hidden" aria-hidden>
+          <span className="flex-1 bg-coral" /><span className="flex-1 bg-sun" /><span className="flex-1 bg-grass" /><span className="flex-1 bg-sky" /><span className="flex-1 bg-grape" />
+        </div>
+        <header className="flex items-center gap-4 border-b-2 border-dashed border-ink/40 pb-4">
+          <LogoMark className="h-20 w-20 shrink-0" />
           <div className="flex-1 text-center">
-            <h1 className="text-xl font-bold leading-tight text-sky sm:text-2xl">{school.name.toUpperCase()}</h1>
-            <p className="text-xs text-ink/60">{school.address}</p>
-            <p className="text-xs italic text-ink/60">Motto: {school.motto}</p>
-            <p className="mt-2 inline-block rounded-full bg-sun px-4 py-0.5 font-display text-sm font-bold text-ink">
+            <h1 className="text-2xl leading-tight text-ink sm:text-3xl">{school.name}</h1>
+            <p className="text-xs text-ink/70">{school.address} · {school.phones[0]}</p>
+            <p className="text-xs italic text-ink/70">Motto: {school.motto}</p>
+            <p className="mt-2 inline-block wobbly-pill border-2 border-ink bg-sun px-4 py-0.5 font-display text-sm font-bold text-ink">
               TERMLY REPORT · {rep.term.toUpperCase()}, {rep.session}
             </p>
           </div>
@@ -109,18 +112,18 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
         </header>
 
         <dl className="grid grid-cols-2 gap-x-6 gap-y-1 py-4 text-sm sm:grid-cols-3">
-          <div><dt className="inline text-ink/50">Name: </dt><dd className="inline font-semibold">{s.name}</dd></div>
-          <div><dt className="inline text-ink/50">Adm. no: </dt><dd className="inline font-mono">{s.admissionNo ?? "–"}</dd></div>
-          <div><dt className="inline text-ink/50">Class: </dt><dd className="inline">{klass(s.classId!)?.name}</dd></div>
-          <div><dt className="inline text-ink/50">Gender: </dt><dd className="inline">{s.gender ?? "–"}</dd></div>
-          <div><dt className="inline text-ink/50">Pupil type: </dt><dd className="inline">{s.boarding ? "Boarder" : "Day"}</dd></div>
-          <div><dt className="inline text-ink/50">Attendance: </dt><dd className="inline">{att.length ? `${present} of ${att.length} days` : "–"}</dd></div>
+          <div><dt className="inline text-ink/60">Name: </dt><dd className="inline font-semibold">{s.name}</dd></div>
+          <div><dt className="inline text-ink/60">Adm. no: </dt><dd className="inline font-mono">{s.admissionNo ?? "–"}</dd></div>
+          <div><dt className="inline text-ink/60">Class: </dt><dd className="inline">{klass(s.classId!)?.name}</dd></div>
+          <div><dt className="inline text-ink/60">Gender: </dt><dd className="inline">{s.gender ?? "–"}</dd></div>
+          <div><dt className="inline text-ink/60">Session: </dt><dd className="inline">{rep.session}</dd></div>
+          <div><dt className="inline text-ink/60">Attendance: </dt><dd className="inline">{att.length ? `${present} of ${att.length} days` : "–"}</dd></div>
         </dl>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-sm">
             <thead>
-              <tr className="bg-sky text-left text-white">
+              <tr className="border-y-2 border-ink bg-sky-soft text-left text-ink">
                 <th className="px-3 py-2">Subject</th>
                 <th className="px-2 py-2 text-center">CA (40)</th>
                 <th className="px-2 py-2 text-center">Exam (60)</th>
@@ -133,7 +136,7 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
               {rep.rows.map((r, i) => {
                 const g = gradeFor(r.ca + r.exam);
                 return (
-                  <tr key={r.id} className={i % 2 ? "bg-cream" : ""}>
+                  <tr key={r.id} className={`border-b border-ink/15 ${i % 2 ? "bg-cream" : ""}`}>
                     <td className="px-3 py-2 font-semibold">{subject(r.subjectId)?.name}</td>
                     <td className="px-2 py-2 text-center tabular-nums">{r.ca}</td>
                     <td className="px-2 py-2 text-center tabular-nums">{r.exam}</td>
@@ -154,20 +157,20 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
             ["Overall grade", `${overall.grade} · ${overall.label}`],
             ["Position", `${ordinal(rep.position)} of ${rep.classSize}`],
           ].map(([k, v]) => (
-            <div key={k} className="rounded-2xl bg-sky-soft p-3">
-              <div className="text-xs font-bold uppercase text-ink/50">{k}</div>
+            <div key={k} className="wobbly border-2 border-ink/20 bg-sun-soft p-3 print:border-ink/40">
+              <div className="text-xs font-bold uppercase text-ink/60">{k}</div>
               <div className="font-display text-lg font-bold">{v}</div>
             </div>
           ))}
         </div>
 
         <div className="mt-5 space-y-3 text-sm">
-          <p><b>Class teacher&apos;s remark:</b> {TEACHER_REMARK[overall.grade]} <span className="text-ink/50">({classTeacher?.name ?? "Class teacher"})</span></p>
+          <p><b>Class teacher&apos;s remark:</b> {TEACHER_REMARK[overall.grade]} <span className="text-ink/60">({classTeacher?.name ?? "Class teacher"})</span></p>
           <p><b>Head teacher&apos;s remark:</b> {PRINCIPAL_REMARK[overall.grade]}</p>
           {resume && <p><b>Next term begins:</b> {formatDate(resume, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</p>}
         </div>
 
-        <p className="mt-5 text-xs text-ink/50">
+        <p className="mt-5 text-xs text-ink/60">
           Grading: A 70–100 Excellent · B 60–69 Very good · C 50–59 Good · D 45–49 Fair · E 40–44 Pass · F 0–39 Fail
         </p>
 
@@ -175,7 +178,7 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
           <p className="w-40 border-t border-ink/30 pt-1 text-center">Class teacher</p>
           <p className="w-40 border-t border-ink/30 pt-1 text-center">Head teacher &amp; stamp</p>
         </div>
-        <p className="mt-6 text-center font-display text-sm text-sky">{school.tagline}</p>
+        <p className="mt-6 text-center font-scribble text-2xl text-coral">{school.tagline} ✎</p>
       </article>
     </div>
   );

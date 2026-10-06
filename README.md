@@ -1,10 +1,10 @@
-# Life Builders International Schools: website + school management system
+# Doodlebrook Schools: website + school management system
 
-A colourful school website (Home, About, News, Events, Gallery, Contact) joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
+A hand-drawn, sketchbook-and-crayons school website for Doodlebrook Schools (a made-up creche, nursery and primary day school), with doodle illustrations instead of photos and Pip the pencil as mascot. The site (Home, About, News, Events, Gallery, Admissions, Apply) is joined to a learning portal, where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
 
 School management features:
 
-- **Student records**: enrolment with automatic admission numbers, day/boarding, parent links, full pupil profiles.
+- **Student records**: enrolment with automatic admission numbers, parent links, full pupil profiles.
 - **School fees**: fee lists per class and term, recording payments with printable receipts, debtors list, collection totals.
 - **Parent portal**: each parent sees their children's attendance, results, homework, fees and receipts, timetable and notices.
 - **Online admissions**: a public Apply page; the office reviews applications and tracks status.
@@ -13,7 +13,7 @@ School management features:
 - **Printable report cards**: subjects, CA/exam, grades, average, position, remarks and next-term date.
 - **Settings**: current term and session, term dates, classes and subjects.
 
-School details (name, address, phones, motto) live in `src/lib/school.ts`; logo and photos are in `public/images/`.
+School details (name, address, phones, motto) live in `src/lib/school.ts`; the SVG logo is `public/images/logo.svg` and every illustration (hero scene, gallery scenes, Pip) is drawn in `src/components/Doodles.tsx`. Colours and fonts are in `src/app/globals.css`.
 
 ## Run it
 
@@ -22,15 +22,15 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-### Demo logins (password for all: `lifebuilders`)
+### Demo logins (password for all: `doodlebrook`)
 
 | Who | Email |
 |---|---|
-| Pupil (Zainab, Primary 4) | student@lifebuilders.test |
-| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@lifebuilders.test |
-| Teacher (Mr Bakare: Science, Computer, Arts) | science@lifebuilders.test |
-| Parent (Mrs Bello: Zainab and Kemi) | parent@lifebuilders.test |
-| Admin (Head Teacher) | admin@lifebuilders.test |
+| Pupil (Zainab, Primary 4) | student@doodlebrook.test |
+| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@doodlebrook.test |
+| Teacher (Mr Bakare: Science, Computer, Arts) | science@doodlebrook.test |
+| Parent (Mrs Bello: Zainab and Kemi) | parent@doodlebrook.test |
+| Admin (Head Teacher) | admin@doodlebrook.test |
 
 The login page also has one-tap demo buttons.
 

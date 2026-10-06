@@ -48,23 +48,34 @@ const NAV: Record<Role, { href: string; label: string; emoji: string }[]> = {
   ],
 };
 
-const COLORS = ["bg-sky", "bg-grass", "bg-coral", "bg-grape", "bg-sun"];
+// Crayon colours for the notebook tabs.
+const TABS = ["#FFC83D", "#9CC7FF", "#9EDDAE", "#FFB8B0", "#C9B5F5"];
 
 export function PortalNav({ role }: { role: Role }) {
   const path = usePathname();
   return (
-    <nav className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
+    <nav aria-label="Portal" className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 pt-1 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:p-0">
       {NAV[role].map((item, i) => {
         const active = item.href === "/portal" ? path === "/portal" : path.startsWith(item.href);
+        const color = TABS[i % TABS.length];
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={`flex shrink-0 items-center gap-3 rounded-2xl px-3 py-2 font-display font-medium transition ${
-              active ? "bg-white text-ink shadow-[0_4px_0_rgba(31,42,68,0.08)] ring-2 ring-ink/5" : "text-ink/70 hover:bg-white/60"
+            aria-current={active ? "page" : undefined}
+            style={active ? { background: color } : undefined}
+            className={`flex shrink-0 items-center gap-2.5 border-2 px-3 py-1.5 font-display text-[1.05rem] font-bold leading-tight transition lg:py-2 ${
+              active
+                ? "wobbly border-ink text-ink shadow-[3px_3px_0_var(--color-ink)] lg:translate-x-3"
+                : "wobbly border-transparent text-ink/75 hover:border-ink/30 hover:bg-white/70 hover:text-ink"
             }`}
           >
-            <span className={`grid h-9 w-9 place-items-center rounded-xl text-lg ${active ? COLORS[i % COLORS.length] : "bg-white/70"}`}>{item.emoji}</span>
+            <span
+              className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 text-base ${active ? "border-ink bg-white" : "border-ink/20 bg-white/80"}`}
+              style={active ? undefined : { boxShadow: `inset 0 -4px 0 ${color}` }}
+            >
+              {item.emoji}
+            </span>
             {item.label}
           </Link>
         );

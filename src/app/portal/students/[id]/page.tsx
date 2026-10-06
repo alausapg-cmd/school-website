@@ -43,13 +43,12 @@ export default async function StudentProfile({ params, searchParams }: PageProps
       {sp.saved && <Notice>✅ Details saved.</Notice>}
 
       <div className="card flex flex-wrap items-center gap-6">
-        <span className="grid h-24 w-24 place-items-center rounded-3xl bg-sun-soft text-6xl">{s.avatar}</span>
+        <span className="grid h-24 w-24 place-items-center -rotate-3 rounded-full border-2 border-ink bg-sun-soft text-6xl">{s.avatar}</span>
         <div className="min-w-0 flex-1">
           <h1 className="text-3xl font-bold">{s.name}</h1>
           <div className="mt-1 flex flex-wrap gap-2 text-sm">
             <span className="chip bg-sky-soft text-sky">{klass(s.classId!)?.name}</span>
             <span className="chip bg-ink/5 font-mono">{s.admissionNo}</span>
-            <span className="chip bg-grape-soft text-grape">{s.boarding ? "🏠 Boarder" : "Day pupil"}</span>
             {s.gender && <span className="chip bg-ink/5">{s.gender}{age(s.dob) !== null ? `, ${age(s.dob)} years` : ""}</span>}
           </div>
           <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
@@ -141,10 +140,7 @@ export default async function StudentProfile({ params, searchParams }: PageProps
               <select name="gender" defaultValue={s.gender} className="input"><option>Female</option><option>Male</option></select>
             </div>
             <div><label className="label">Date of birth</label><input name="dob" type="date" defaultValue={s.dob} className="input" /></div>
-            <div>
-              <label className="label">Day or boarding</label>
-              <select name="boarding" defaultValue={s.boarding ? "yes" : "no"} className="input"><option value="no">Day pupil</option><option value="yes">Boarder</option></select>
-            </div>
+            <input type="hidden" name="boarding" value={s.boarding ? "yes" : "no"} />
             <div><label className="label">Address</label><input name="address" defaultValue={s.address} className="input" /></div>
             <div><SubmitButton>Save changes</SubmitButton></div>
           </form>

@@ -10,29 +10,30 @@ export default function ContactPage() {
   const now = today();
   return (
     <>
-      <PageHero emoji="🎒" title="Admissions & contact" text={`Admission is in progress into all classes for the ${school.currentSession} session.`} color="bg-sun text-ink!" />
-      <section className="mx-auto grid max-w-5xl gap-8 px-4 py-12 md:grid-cols-2">
-        <div className="space-y-4">
+      <PageHero emoji="🎒" title="Admissions & contact" text={`Admission is open into the creche, nursery and every primary class for the ${school.currentSession} session.`} tone="sun" pipSays="We'd love to meet you!" />
+      <section className="mx-auto grid max-w-5xl gap-8 px-4 py-14 md:grid-cols-2">
+        <div className="space-y-6">
           <div className="card bg-sky text-white">
-            <h2 className="text-2xl font-bold">{school.currentSession} entrance examination</h2>
+            <h2 className="text-3xl">{school.currentSession} assessment days</h2>
+            <p className="mt-1 text-white/85">A relaxed play-and-draw morning for new pupils.</p>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              {school.entranceExams.map((d) => {
+              {school.entranceExams.map((d, i) => {
                 const past = d < now;
                 return (
-                  <div key={d} className={`rounded-2xl p-3 text-center ${past ? "bg-white/10 text-white/60" : "bg-sun text-ink"}`}>
+                  <div key={d} className={`wobbly border-2 p-3 text-center ${i % 2 ? "rotate-1" : "-rotate-1"} ${past ? "border-white/30 bg-white/10 text-white/70" : "border-ink bg-sun text-ink"}`}>
                     <div className="font-display text-xl font-bold">{formatDate(d, { day: "numeric", month: "long" })}</div>
-                    <div className="text-xs font-semibold uppercase">{past ? "Held" : formatDate(d, { weekday: "long" })}</div>
+                    <div className="text-xs font-semibold uppercase">{past ? "Held ✓" : formatDate(d, { weekday: "long" })}</div>
                   </div>
                 );
               })}
             </div>
-            <p className="mt-4 text-sm text-white/90">Missed these dates? Admission is still open. Call the school to book your child&apos;s assessment.</p>
+            <p className="mt-4 text-sm text-white/90">Missed these dates? Admission is still open. Call the school to book your child&apos;s visit.</p>
           </div>
           <div className="card">
-            <h3 className="text-xl font-semibold">📞 Call us</h3>
+            <h3 className="text-2xl">📞 Call us</h3>
             <ul className="mt-2 grid gap-1 sm:grid-cols-2">
               {school.phones.map((p) => (
-                <li key={p} className="font-display text-lg">{p}</li>
+                <li key={p} className="font-display text-xl font-bold">{p}</li>
               ))}
             </ul>
           </div>
@@ -43,19 +44,20 @@ export default function ContactPage() {
             <div key={t} className="card flex items-center gap-4">
               <span className="text-4xl">{e}</span>
               <div className="min-w-0">
-                <div className="text-sm font-bold uppercase text-ink/50">{t}</div>
-                <div className="break-words font-display text-lg">{v}</div>
+                <div className="text-sm font-bold uppercase text-ink/60">{t}</div>
+                <div className="break-words font-display text-lg font-bold">{v}</div>
               </div>
             </div>
           ))}
-          <div className="card bg-grass-soft">
-            <h3 className="text-xl font-semibold">How to join us</h3>
-            <ol className="mt-2 list-inside list-decimal space-y-1 text-ink/80">
-              <li>Apply online, or call or visit the school office for an admission form.</li>
-              <li>Your child sits the entrance examination.</li>
-              <li>Receive your admission letter and welcome pack.</li>
+          <div className="lined relative wobbly border-2 border-ink py-5 pl-16 pr-5 shadow-[4px_5px_0_rgb(42_43_51/0.12)]">
+            <span className="tape" aria-hidden />
+            <h3 className="text-2xl leading-8">How to join us</h3>
+            <ol className="mt-1 list-inside list-decimal leading-8 text-ink/90">
+              <li>Apply online, or visit the school office for a form.</li>
+              <li>Bring your child for a play-and-draw assessment.</li>
+              <li>Receive your welcome letter and starter sketchbook!</li>
             </ol>
-            <Link href="/apply" className="btn-sun mt-4">📝 Apply online</Link>
+            <Link href="/apply" className="btn-sun mt-3">📝 Apply online</Link>
           </div>
         </div>
         <ContactForm />
