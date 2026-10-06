@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sunshine Academy: school website + learning portal
 
-## Getting Started
+A colourful school website (Home, About, News, Events, Gallery, Contact) joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
 
-First, run the development server:
+"Sunshine Academy" and its details are placeholders: edit `src/lib/school.ts`.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Demo logins (password for all: `sunshine`)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Who | Email |
+|---|---|
+| Pupil (Zainab, Primary 4) | student@sunshine.test |
+| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@sunshine.test |
+| Teacher (Mr Bakare: Science, Computer, Arts) | science@sunshine.test |
+| Admin (Head Teacher) | admin@sunshine.test |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The login page also has one-tap demo buttons.
 
-## Learn More
+## How data works right now
 
-To learn more about Next.js, take a look at the following resources:
+This first version stores everything in `data/db.json` (created from `src/lib/seed.ts` on first run) and uploaded files in `data/uploads/`. Delete the `data/` folder, or use "Reset sample data" on the admin dashboard, to start fresh. This is for trying the app out and is not meant for real pupils' data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Going live with Supabase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`supabase/schema.sql` holds the production database: tables, row-level security (pupils only see their own class and their own results; quiz answers are hidden from pupils), and notes on storage buckets. Going live means creating a Supabase project, running that file, and swapping `src/lib/db.ts` / `src/lib/auth.ts` for Supabase calls.
 
-## Deploy on Vercel
+## Where things are
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app/(site)/` public website pages
+- `src/app/portal/` learning portal pages; `actions.ts` has every save/update with role checks
+- `src/app/login/` sign-in
+- `src/lib/` data store, auth, seed data, grading scale (A ≥ 70, B ≥ 60, C ≥ 50, D ≥ 45, E ≥ 40)
