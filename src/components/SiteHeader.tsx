@@ -11,7 +11,7 @@ const links = [
   { href: "/news", label: "News" },
   { href: "/events", label: "Events" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Admissions" },
 ];
 
 export function SiteHeader() {

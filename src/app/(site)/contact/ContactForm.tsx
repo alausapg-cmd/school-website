@@ -32,6 +32,7 @@ export function ContactForm() {
         <label className="label" htmlFor="topic">I&apos;m asking about</label>
         <select id="topic" className="input">
           <option>Admissions</option>
+          <option>Boarding</option>
           <option>School fees</option>
           <option>Visiting the school</option>
           <option>Something else</option>

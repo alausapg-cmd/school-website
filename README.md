@@ -1,8 +1,8 @@
-# Sunshine Academy: school website + learning portal
+# Life Builders International Schools: website + learning portal
 
 A colourful school website (Home, About, News, Events, Gallery, Contact) joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
 
-"Sunshine Academy" and its details are placeholders: edit `src/lib/school.ts`.
+School details (name, address, phones, motto) live in `src/lib/school.ts`; logo and photos are in `public/images/`.
 
 ## Run it
 
@@ -11,14 +11,14 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-### Demo logins (password for all: `sunshine`)
+### Demo logins (password for all: `lifebuilders`)
 
 | Who | Email |
 |---|---|
-| Pupil (Zainab, Primary 4) | student@sunshine.test |
-| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@sunshine.test |
-| Teacher (Mr Bakare: Science, Computer, Arts) | science@sunshine.test |
-| Admin (Head Teacher) | admin@sunshine.test |
+| Pupil (Zainab, Primary 4) | student@lifebuilders.test |
+| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@lifebuilders.test |
+| Teacher (Mr Bakare: Science, Computer, Arts) | science@lifebuilders.test |
+| Admin (Head Teacher) | admin@lifebuilders.test |
 
 The login page also has one-tap demo buttons.
 

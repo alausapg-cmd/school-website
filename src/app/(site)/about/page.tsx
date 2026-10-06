@@ -1,45 +1,39 @@
+import Image from "next/image";
 import { PageHero } from "@/components/PageHero";
 import { school } from "@/lib/school";
 
 export const metadata = { title: "About us" };
 
 const values = [
-  { emoji: "💛", title: "Kindness", text: "We look after each other and our world." },
-  { emoji: "🔍", title: "Curiosity", text: "We ask questions and love finding answers." },
-  { emoji: "🦁", title: "Courage", text: "We try new things and learn from mistakes." },
-  { emoji: "🤝", title: "Teamwork", text: "We achieve more when we work together." },
-];
-
-const facilities = [
-  ["📚", "Library & reading corners"],
-  ["🔬", "Science lab"],
-  ["💻", "Computer room"],
-  ["⚽", "Sports field"],
-  ["🎵", "Music room"],
-  ["🌳", "School garden"],
+  { emoji: "✝️", title: "Godliness", text: "We honour God in our words, work and play." },
+  { emoji: "⭐", title: "Excellence", text: "We give our best in every subject and activity." },
+  { emoji: "⚖️", title: "Integrity", text: "Quality education without corruption, always." },
+  { emoji: "🦁", title: "Leadership", text: "We serve others and lead by good example." },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <PageHero emoji="🏫" title="About our school" text={`Since ${school.founded}, ${school.name} has helped children grow into confident, caring learners.`} />
+      <PageHero emoji="🏫" title="About our school" text={school.tagline} />
 
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:grid-cols-2">
         <div className="space-y-4 text-lg text-ink/80">
-          <h2 className="text-4xl font-bold text-ink">Our story</h2>
+          <h2 className="text-4xl font-bold text-ink">Who we are</h2>
           <p>
-            {school.name} began in {school.founded} with just 24 pupils and one big idea: school should be a place children run towards every morning.
+            {school.name} is a Christian day and boarding school on Igbusi Road, Iyana Ilogbo, along the Lagos to Abeokuta Expressway in Ogun State.
           </p>
           <p>
-            Today we are a family of over 480 pupils from Creche to Primary 6. We blend the Nigerian curriculum with hands-on projects, creative arts and digital skills so every child can shine in their own way.
+            We are approved by the government and are a recognised centre for WAEC, NECO and BECE examinations. Our pupils grow in knowledge and in character, in a safe and caring environment.
           </p>
+          <div className="rounded-3xl bg-sky-soft p-5">
+            <p className="font-display text-sm font-semibold uppercase tracking-widest text-sky">Our mission</p>
+            <p className="mt-1 font-display text-2xl font-semibold text-ink">{school.mission}</p>
+          </div>
         </div>
-        <div className="grid grid-cols-3 gap-3 text-5xl">
-          {["🌞", "📐", "🎨", "🧩", "🌍", "🎭", "🚀", "🎵", "🌱"].map((e, i) => (
-            <div key={i} className={`grid aspect-square place-items-center rounded-3xl ${["bg-sun-soft", "bg-sky-soft", "bg-grass-soft", "bg-coral-soft", "bg-grape-soft"][i % 5]}`}>
-              {e}
-            </div>
-          ))}
+        <div className="grid grid-cols-2 gap-3">
+          <Image src="/images/building.jpg" alt="Our school building" width={664} height={336} className="col-span-2 w-full rounded-3xl object-cover" />
+          <Image src="/images/pupils.jpg" alt="Pupils at assembly" width={226} height={258} className="h-48 w-full rounded-3xl object-cover" />
+          <Image src="/images/play.jpg" alt="Pupils at the playground" width={188} height={258} className="h-48 w-full rounded-3xl object-cover" />
         </div>
       </section>
 
@@ -60,21 +54,28 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-4xl px-4 py-14">
         <div className="card flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-          <div className="grid h-28 w-28 shrink-0 place-items-center rounded-full bg-grape-soft text-6xl">👩🏾‍🏫</div>
+          <Image src="/images/logo.png" alt="" width={112} height={112} className="h-28 w-28 shrink-0 rounded-full ring-4 ring-sun" />
           <div>
-            <h2 className="text-3xl font-bold">A welcome from our Head Teacher</h2>
+            <h2 className="text-3xl font-bold">Our motto</h2>
+            <p className="mt-2 font-display text-2xl text-sky">&ldquo;{school.motto}&rdquo;</p>
             <p className="mt-3 text-ink/80">
-              &ldquo;Every child who walks through our gates is unique. Our job is to help them discover what makes them special, and to make learning an adventure they will remember for life. Welcome to the {school.shortName} family!&rdquo;
+              We believe every child is a gift from God with a purpose to fulfil. Our teachers combine sound teaching with Christian values, so that our pupils leave us as competent, honest and godly leaders, ready to build their nation.
             </p>
-            <p className="mt-3 font-display font-semibold">Mrs Funmi Adeyemi, Head Teacher</p>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16">
-        <h2 className="text-center text-4xl font-bold">Our facilities</h2>
+        <h2 className="text-center text-4xl font-bold">School life</h2>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {facilities.map(([e, t]) => (
+          {[
+            ["🏠", "Day and boarding"],
+            ["🙏", "Morning devotion"],
+            ["📖", "Classrooms for every level"],
+            ["⚽", "Sports and inter-house games"],
+            ["🎨", "Clubs and creative arts"],
+            ["🛝", "Children's playground"],
+          ].map(([e, t]) => (
             <div key={t} className="card flex items-center gap-4">
               <span className="text-4xl">{e}</span>
               <span className="font-display text-lg font-semibold">{t}</span>

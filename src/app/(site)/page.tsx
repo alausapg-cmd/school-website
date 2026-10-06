@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { EventCard } from "@/components/EventCard";
 import { NewsCard } from "@/components/NewsCard";
@@ -6,11 +7,11 @@ import { getDB } from "@/lib/db";
 import { today } from "@/lib/format";
 import { school } from "@/lib/school";
 
-const reasons = [
-  { emoji: "🧪", title: "Learn by doing", text: "Experiments, projects and play make every lesson stick.", bg: "bg-grass-soft" },
-  { emoji: "📚", title: "Love of reading", text: "Cosy reading corners in every class and a library full of adventures.", bg: "bg-sky-soft" },
-  { emoji: "🎨", title: "Creative minds", text: "Art, music, drama and coding clubs for every kind of talent.", bg: "bg-grape-soft" },
-  { emoji: "💻", title: "Learning online too", text: "Notes, homework and fun quizzes waiting in our Learning Portal.", bg: "bg-sun-soft" },
+const pillars = [
+  { emoji: "✝️", title: "Godly character", text: "Daily devotion, Bible knowledge and values that shape how pupils live.", bg: "bg-sky-soft" },
+  { emoji: "📚", title: "Sound academics", text: "Strong foundations from the early years right through to WAEC, NECO and BECE.", bg: "bg-sun-soft" },
+  { emoji: "🦁", title: "Leadership", text: "Prefect roles, clubs and projects that grow confident, responsible leaders.", bg: "bg-grass-soft" },
+  { emoji: "🤝", title: "Integrity", text: "Quality education without corruption: honest work and honest results.", bg: "bg-coral-soft" },
 ];
 
 export default async function HomePage() {
@@ -20,53 +21,57 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="overflow-hidden">
-        <div className="relative">
-        <div className="pointer-events-none absolute inset-0 select-none text-5xl sm:text-6xl" aria-hidden>
-          <span className="absolute left-[6%] top-10 animate-float">⭐</span>
-          <span className="absolute right-[8%] top-16 animate-float [animation-delay:1s]">🎈</span>
-          <span className="absolute bottom-24 left-[12%] hidden animate-float [animation-delay:2s] sm:block">✏️</span>
-          <span className="absolute bottom-16 right-[14%] hidden animate-float [animation-delay:3s] sm:block">🚀</span>
-        </div>
-        <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-14 text-center sm:pt-20">
-          <span className="chip mb-5 bg-sun-soft text-ink">🌞 Admissions open for {school.currentSession}</span>
-          <h1 className="mx-auto max-w-3xl text-5xl font-bold leading-[1.05] sm:text-7xl">
-            Where little minds grow{" "}
-            <span className="relative inline-block text-sky">
-              big dreams
-              <svg viewBox="0 0 200 12" className="absolute -bottom-2 left-0 w-full text-sun" aria-hidden>
-                <path d="M2 8 Q50 2 100 7 T198 6" stroke="currentColor" strokeWidth="5" fill="none" strokeLinecap="round" />
-              </svg>
-            </span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-ink/70">
-            {school.name} is a happy, caring primary school where children explore, create and learn every day, in class and online.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/about" className="btn-primary text-lg">Discover our school</Link>
-            <Link href="/login" className="btn-sun text-lg">🎒 Go to Learning Portal</Link>
+      <section className="overflow-hidden bg-sky text-white">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pb-10 pt-12 md:grid-cols-[1.1fr_1fr] md:pt-16">
+          <div>
+            <span className="chip mb-5 bg-sun text-ink">🎒 Admission in progress into all classes · {school.currentSession}</span>
+            <h1 className="text-5xl font-bold leading-[1.05] sm:text-6xl">
+              Building lives to the <span className="text-sun">glory of God</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-lg text-white/90">
+              {school.name} is a Christian day and boarding school raising a generation of competent and godly leaders for Nigeria.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn-sun text-lg">Apply for admission</Link>
+              <Link href="/login" className="btn bg-white/15 text-lg text-white ring-2 ring-white/40 hover:bg-white/25">🎒 Learning Portal</Link>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {school.approvals.map((a) => (
+                <span key={a} className="chip bg-white/15 text-sm text-white ring-1 ring-white/30">✓ {a}</span>
+              ))}
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute -left-4 -top-4 h-full w-full rotate-[-3deg] rounded-[2rem] bg-sun" aria-hidden />
+            <Image src="/images/building.jpg" alt="The Life Builders school building" width={664} height={336} priority className="relative w-full rounded-[2rem] object-cover shadow-xl ring-4 ring-white" />
+            <div className="absolute -bottom-6 -right-2 hidden rotate-3 rounded-2xl bg-white p-1.5 shadow-xl sm:block">
+              <Image src="/images/girls.jpg" alt="Life Builders pupils in uniform" width={416} height={310} className="h-32 w-auto rounded-xl" />
+            </div>
           </div>
         </div>
-        </div>
-        <div className="bg-sky text-white">
-          <Wave flip className="-mt-px text-cream" />
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 sm:grid-cols-4">
-            {school.stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-4xl">{s.emoji}</div>
-                <div className="font-display text-4xl font-bold">{s.value}</div>
-                <div className="text-sm font-semibold opacity-90">{s.label}</div>
-              </div>
-            ))}
-          </div>
-          <Wave className="text-cream" />
+        <Wave className="text-cream" />
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-6 pt-8">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {school.highlights.map((h) => (
+            <div key={h.label} className="card p-5 text-center">
+              <div className="text-4xl">{h.value}</div>
+              <div className="mt-1 font-display text-lg font-bold text-sky">{h.label}</div>
+              <div className="text-sm text-ink/70">{h.text}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-center text-4xl font-bold">Why children love {school.shortName} 💛</h2>
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="font-display text-sm font-semibold uppercase tracking-widest text-coral">Our mission</p>
+          <h2 className="mt-2 text-4xl font-bold">Raising competent and godly leaders for Nigeria</h2>
+          <p className="mt-3 text-lg text-ink/70">Our motto is <b className="text-sky">{school.motto}</b>. Every child is taught to love God, work hard and lead with integrity.</p>
+        </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {reasons.map((r) => (
+          {pillars.map((r) => (
             <div key={r.title} className={`rounded-3xl ${r.bg} p-6 transition hover:-translate-y-1`}>
               <div className="text-5xl">{r.emoji}</div>
               <h3 className="mt-3 text-xl font-semibold">{r.title}</h3>
@@ -97,13 +102,13 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-grape px-6 py-12 text-white sm:px-12">
-          <div className="absolute -right-10 -top-10 text-[10rem] opacity-20" aria-hidden>🎒</div>
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-12 text-white sm:px-12">
+          <div className="absolute -right-10 -top-10 text-[10rem] opacity-10" aria-hidden>🎒</div>
           <div className="relative grid items-center gap-8 md:grid-cols-2">
             <div>
               <h2 className="text-4xl font-bold">Our Learning Portal</h2>
               <p className="mt-3 text-lg opacity-90">
-                Teachers share notes and homework. Pupils take fun quizzes, hand in assignments, check their attendance and see their report cards, all in one place.
+                Teachers share notes and assignments. Pupils take quizzes, hand in work, check their attendance and see their report cards, all in one place.
               </p>
               <Link href="/login" className="btn-sun mt-6">Log in to learn 🚀</Link>
             </div>
@@ -111,10 +116,10 @@ export default async function HomePage() {
               {[
                 ["📒", "Notes"],
                 ["✍️", "Assignments"],
-                ["🧠", "Quizzes"],
+                ["🧠", "Assessments"],
                 ["🏆", "Results"],
               ].map(([e, t]) => (
-                <div key={t} className="rounded-3xl bg-white/95 p-5 text-center">
+                <div key={t} className="rounded-3xl bg-white p-5 text-center">
                   <div className="text-4xl">{e}</div>
                   <div className="font-display font-semibold">{t}</div>
                 </div>

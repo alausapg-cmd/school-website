@@ -254,7 +254,7 @@ export async function createPerson(formData: FormData) {
       id: newId(role === "teacher" ? "tch" : "stu"),
       name: str(formData, "name"),
       email,
-      password: str(formData, "password") || "sunshine",
+      password: str(formData, "password") || "lifebuilders",
       role,
       avatar: role === "teacher" ? "🍎" : ["🐣", "🐢", "🦒", "🐧", "🐻"][db.users.length % 5],
       ...(role === "student"

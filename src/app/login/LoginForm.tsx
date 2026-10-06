@@ -4,9 +4,9 @@ import { useActionState, useRef } from "react";
 import { login } from "./actions";
 
 const demo = [
-  { label: "Pupil", who: "Zainab, Primary 4", email: "student@sunshine.test", emoji: "🦊", cls: "bg-sun-soft" },
-  { label: "Teacher", who: "Mrs Okafor", email: "teacher@sunshine.test", emoji: "🌻", cls: "bg-grass-soft" },
-  { label: "Admin", who: "Head Teacher", email: "admin@sunshine.test", emoji: "👑", cls: "bg-grape-soft" },
+  { label: "Pupil", who: "Zainab, Primary 4", email: "student@lifebuilders.test", emoji: "🦊", cls: "bg-sun-soft" },
+  { label: "Teacher", who: "Mrs Okafor", email: "teacher@lifebuilders.test", emoji: "🌻", cls: "bg-grass-soft" },
+  { label: "Admin", who: "Head Teacher", email: "admin@lifebuilders.test", emoji: "👑", cls: "bg-grape-soft" },
 ];
 
 export function LoginForm() {
@@ -16,7 +16,7 @@ export function LoginForm() {
   function quick(email: string) {
     const f = form.current!;
     (f.elements.namedItem("email") as HTMLInputElement).value = email;
-    (f.elements.namedItem("password") as HTMLInputElement).value = "sunshine";
+    (f.elements.namedItem("password") as HTMLInputElement).value = "lifebuilders";
     f.requestSubmit();
   }
 
@@ -25,7 +25,7 @@ export function LoginForm() {
       <form ref={form} action={action} className="space-y-4">
         <div>
           <label className="label" htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" required className="input" placeholder="you@sunshine.test" />
+          <input id="email" name="email" type="email" required className="input" placeholder="you@lifebuilders.test" />
         </div>
         <div>
           <label className="label" htmlFor="password">Password</label>
@@ -37,7 +37,7 @@ export function LoginForm() {
         </button>
       </form>
       <div>
-        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: sunshine)</p>
+        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: lifebuilders)</p>
         <div className="grid grid-cols-3 gap-2">
           {demo.map((d) => (
             <button

@@ -17,7 +17,7 @@ function schoolDaysBack(count: number) {
   return days.reverse();
 }
 
-const PASSWORD = "sunshine";
+const PASSWORD = "lifebuilders";
 
 const p4 = [
   ["Zainab Bello", "🦊"],
@@ -43,28 +43,28 @@ function students(list: readonly (readonly [string, string])[], classId: string,
     avatar,
     role: "student",
     classId,
-    email: i === 0 && classId === "p4" ? "student@sunshine.test" : `${name.split(" ")[0].toLowerCase()}@sunshine.test`,
+    email: i === 0 && classId === "p4" ? "student@lifebuilders.test" : `${name.split(" ")[0].toLowerCase()}@lifebuilders.test`,
     password: PASSWORD,
   }));
 }
 
 export function buildSeed(): DB {
   const users: User[] = [
-    { id: "adm_1", name: "Mrs Funmi Adeyemi", email: "admin@sunshine.test", password: PASSWORD, role: "admin", avatar: "👑" },
+    { id: "adm_1", name: "Mrs Funmi Adeyemi", email: "admin@lifebuilders.test", password: PASSWORD, role: "admin", avatar: "👑" },
     {
       id: "tch_1",
       name: "Mrs Adaeze Okafor",
-      email: "teacher@sunshine.test",
+      email: "teacher@lifebuilders.test",
       password: PASSWORD,
       role: "teacher",
       avatar: "🌻",
       classIds: ["p4", "p5"],
-      subjectIds: ["maths", "english", "social"],
+      subjectIds: ["maths", "english", "social", "crs"],
     },
     {
       id: "tch_2",
       name: "Mr Tunde Bakare",
-      email: "science@sunshine.test",
+      email: "science@lifebuilders.test",
       password: PASSWORD,
       role: "teacher",
       avatar: "🔬",
@@ -90,7 +90,7 @@ export function buildSeed(): DB {
     });
   });
 
-  const subjectsForResults = ["maths", "english", "science", "social", "arts", "computer"];
+  const subjectsForResults = ["maths", "english", "science", "social", "arts", "computer", "crs"];
   const results: Result[] = [];
   studentIds.forEach((s, si) => {
     subjectsForResults.forEach((sub, j) => {
@@ -112,8 +112,8 @@ export function buildSeed(): DB {
   return {
     users,
     classes: [
-      { id: "p4", name: "Primary 4 Sunflowers", emoji: "🌻" },
-      { id: "p5", name: "Primary 5 Rainbows", emoji: "🌈" },
+      { id: "p4", name: "Primary 4 Faith", emoji: "🌱" },
+      { id: "p5", name: "Primary 5 Grace", emoji: "🕊️" },
     ],
     subjects: [
       { id: "maths", name: "Mathematics", emoji: "🔢", color: "#3B82F6" },
@@ -122,6 +122,7 @@ export function buildSeed(): DB {
       { id: "social", name: "Social Studies", emoji: "🌍", color: "#F59E0B" },
       { id: "arts", name: "Creative Arts", emoji: "🎨", color: "#A855F7" },
       { id: "computer", name: "Computer Studies", emoji: "💻", color: "#06B6D4" },
+      { id: "crs", name: "Christian Religious Studies", emoji: "✝️", color: "#157A3C" },
     ],
     notes: [
       {
@@ -255,38 +256,38 @@ export function buildSeed(): DB {
     news: [
       {
         id: "news_1",
-        title: "Our Science Fair was a blast! 🚀",
-        summary: "Volcanoes, solar ovens and a robot that waters plants. Our young scientists amazed everyone.",
-        body: "Last Friday the school hall turned into a laboratory as over 120 pupils showed off their science projects.\n\nPrimary 5 Rainbows won the overall prize with a robot that waters plants when the soil gets dry. Primary 4 Sunflowers impressed the judges with a solar oven that baked real biscuits!\n\nA big thank you to the parents who came to cheer, and to Mr Bakare for organising the day.",
-        date: daysFromNow(-5),
-        emoji: "🔬",
-        color: "#22C55E",
+        title: "Admission in progress into all classes 🎒",
+        summary: "Admission for the 2026/2027 session is still open. Call the school office to book an entrance examination.",
+        body: "We are happy to welcome new families to Life Builders International Schools for the 2026/2027 session. Admission is in progress into all classes, for both day and boarding pupils.\n\nOur entrance examinations held on July 11th, August 1st, August 22nd and September 5th. If you missed these dates, please call 0703 661 6844 or 0706 068 8180 to arrange an assessment for your child.",
+        date: daysFromNow(-3),
+        emoji: "🎒",
+        color: "#157A3C",
       },
       {
         id: "news_2",
         title: "Welcome back for First Term",
-        summary: "A warm welcome to new and returning families for the 2026/2027 session.",
-        body: "We are so happy to welcome everyone back! This term we have new reading corners in every classroom, a refreshed playground and two new clubs: Chess Club and Little Chefs.\n\nPlease remember that school starts at 7:30am and pupils should come with their water bottles every day.",
+        summary: "A warm welcome to new and returning pupils, day and boarding, for the 2026/2027 session.",
+        body: "We give God all the glory for a new session! We welcome back all our pupils and say a special welcome to our new day and boarding pupils.\n\nParents are reminded that pupils should be in school by 7:30am, neatly dressed in full school uniform.",
         date: daysFromNow(-20),
-        emoji: "🎒",
-        color: "#3B82F6",
+        emoji: "🙏",
+        color: "#F5B800",
       },
       {
         id: "news_3",
-        title: "Inter-house sports: Yellow House takes the cup 🏆",
-        summary: "Races, relays and a very loud cheering squad. Congratulations to Yellow House!",
-        body: "What a day! Yellow House won the inter-house sports cup with 214 points, just ahead of Blue House with 201.\n\nSpecial mention to Kemi Johnson from Primary 5, who won three races in a row.",
+        title: "Boarding at Life Builders: a home away from home 🏠",
+        summary: "Our boarding pupils enjoy supervised study, devotion and plenty of fun in a safe, caring environment.",
+        body: "Boarding at Life Builders gives pupils a structured day of lessons, supervised evening study, devotion and recreation, under the care of dedicated house parents.\n\nTo find out more about boarding places, please call the school office or visit us at Igbusi Road, Iyana Ilogbo.",
         date: daysFromNow(-40),
-        emoji: "🏃",
-        color: "#F59E0B",
+        emoji: "🏠",
+        color: "#D7263D",
       },
     ],
     events: [
-      { id: "evt_1", title: "Independence Day Cultural Parade", date: daysFromNow(4), time: "9:00am", location: "School field", description: "Come dressed in your cultural attire! Songs, dances and food from across Nigeria.", emoji: "🇳🇬" },
-      { id: "evt_2", title: "Parents' Open Day", date: daysFromNow(11), time: "10:00am to 1:00pm", location: "All classrooms", description: "Meet your child's teachers, see their work and visit our new reading corners.", emoji: "👨‍👩‍👧" },
-      { id: "evt_3", title: "Spelling Bee Finals", date: daysFromNow(18), time: "11:00am", location: "School hall", description: "Our best spellers from Primary 3 to 6 compete for the golden bee trophy.", emoji: "🐝" },
-      { id: "evt_4", title: "Christmas Carol & End of Term Party", date: daysFromNow(60), time: "12:00pm", location: "School hall", description: "Carols, a nativity play and lots of fun to close the term.", emoji: "🎄" },
-      { id: "evt_5", title: "Science Fair", date: daysFromNow(-5), time: "9:00am", location: "School hall", description: "Pupils showed off amazing science projects.", emoji: "🔬" },
+      { id: "evt_1", title: "Independence Day Cultural Celebration", date: daysFromNow(4), time: "9:00am", location: "School field", description: "Pupils come dressed in cultural attire for songs, dances and food from across Nigeria.", emoji: "🇳🇬" },
+      { id: "evt_2", title: "Mid-term Thanksgiving Service", date: daysFromNow(11), time: "10:00am", location: "School hall", description: "Parents are welcome to join us as we thank God for the term so far.", emoji: "🙏" },
+      { id: "evt_3", title: "Open Day for Parents", date: daysFromNow(18), time: "10:00am to 1:00pm", location: "All classrooms", description: "Meet your child's teachers, see their work and tour the boarding house.", emoji: "👨‍👩‍👧" },
+      { id: "evt_4", title: "Carol Service and End of Term", date: daysFromNow(60), time: "12:00pm", location: "School hall", description: "Carols, a nativity play and prize giving to close the term.", emoji: "🎄" },
+      { id: "evt_5", title: "Entrance Examination", date: "2026-09-05", time: "9:00am", location: "School hall", description: "Final 2026/2027 entrance examination for new pupils.", emoji: "📝" },
     ],
   };
 }

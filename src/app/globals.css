@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-sun: #FFC93C;
-  --color-sun-soft: #FFF3C4;
-  --color-sky: #3FA9F5;
-  --color-sky-soft: #DDF0FF;
-  --color-grass: #3CC47C;
-  --color-grass-soft: #DBF7E8;
-  --color-coral: #FF6B6B;
-  --color-coral-soft: #FFE1E1;
-  --color-grape: #8B5CF6;
-  --color-grape-soft: #EDE5FF;
-  --color-ink: #1F2A44;
-  --color-cream: #FFFBF2;
+  --color-sun: #F5B800;
+  --color-sun-soft: #FFF4CC;
+  --color-sky: #157A3C;
+  --color-sky-soft: #DDF2E3;
+  --color-grass: #6DB33F;
+  --color-grass-soft: #EAF6DC;
+  --color-coral: #D7263D;
+  --color-coral-soft: #FCE3E6;
+  --color-grape: #2E7DC4;
+  --color-grape-soft: #DFEEFB;
+  --color-ink: #13291C;
+  --color-cream: #F7FAF1;
   --font-display: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
   --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
   --animate-float: float 6s ease-in-out infinite;
@@ -47,13 +47,13 @@ h1, h2, h3, h4 {
   @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-display text-base font-semibold transition active:translate-y-0.5 disabled:opacity-50;
 }
 @utility btn-primary {
-  @apply btn bg-sky text-white shadow-[0_4px_0_#1d7fc4] hover:bg-sky/90;
+  @apply btn bg-sky text-white shadow-[0_4px_0_#0d5527] hover:bg-sky/90;
 }
 @utility btn-sun {
-  @apply btn bg-sun text-ink shadow-[0_4px_0_#e0a800] hover:brightness-105;
+  @apply btn bg-sun text-ink shadow-[0_4px_0_#c99700] hover:brightness-105;
 }
 @utility btn-grass {
-  @apply btn bg-grass text-white shadow-[0_4px_0_#2a9a5f] hover:brightness-105;
+  @apply btn bg-grass text-white shadow-[0_4px_0_#4f8a2a] hover:brightness-105;
 }
 @utility btn-ghost {
   @apply btn bg-white text-ink ring-2 ring-ink/10 hover:bg-ink/5;

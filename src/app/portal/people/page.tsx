@@ -26,7 +26,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/portal/pe
           <div className="grid gap-4 sm:grid-cols-3">
             <div><label className="label">Full name</label><input name="name" required className="input" /></div>
             <div><label className="label">Email</label><input name="email" type="email" required className="input" /></div>
-            <div><label className="label">Starting password</label><input name="password" defaultValue="sunshine" className="input" /></div>
+            <div><label className="label">Starting password</label><input name="password" defaultValue="lifebuilders" className="input" /></div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
