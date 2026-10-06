@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { school } from "@/lib/school";
 import { SubmitButton } from "@/components/SubmitButton";
 import { Empty, PageHeader } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
@@ -66,7 +67,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/portal/
               </div>
             </fieldset>
             <SubmitButton>Enrol pupil</SubmitButton>
-            <p className="text-sm text-ink/60">An admission number is given automatically. Pupil and parent can log in with the password <b>lifebuilders</b>.</p>
+            <p className="text-sm text-ink/60">An admission number is given automatically. Pupil and parent can log in with the password <b>{school.demoPassword}</b>.</p>
           </form>
         </details>
       )}

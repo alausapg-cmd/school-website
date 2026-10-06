@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { school } from "@/lib/school";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { mutate, resetDB } from "@/lib/db";
@@ -255,7 +256,7 @@ export async function createPerson(formData: FormData) {
       id: newId(role === "teacher" ? "tch" : role === "parent" ? "par" : "stu"),
       name: str(formData, "name"),
       email,
-      password: str(formData, "password") || "lifebuilders",
+      password: str(formData, "password") || school.demoPassword,
       role,
       avatar: role === "teacher" ? "🍎" : role === "parent" ? "👪" : ["🐣", "🐢", "🦒", "🐧", "🐻"][db.users.length % 5],
       phone: str(formData, "phone") || undefined,
@@ -282,7 +283,7 @@ export async function resetDemo() {
 function nextAdmissionNo(db: DB) {
   const year = new Date().getFullYear();
   const n = db.users.filter((u) => u.admissionNo?.includes(`/${year}/`)).length + 1;
-  return `LBIS/${year}/${String(n).padStart(3, "0")}`;
+  return `${school.admissionPrefix}/${year}/${String(n).padStart(3, "0")}`;
 }
 
 export async function createStudent(formData: FormData) {
@@ -298,9 +299,9 @@ export async function createStudent(formData: FormData) {
         db.users.push({
           id: parentId,
           name: str(formData, "parentName") || "Parent",
-          email: email || `${parentId}@lifebuilders.test`,
+          email: email || `${parentId}@${school.demoDomain}`,
           phone: str(formData, "parentPhone"),
-          password: "lifebuilders",
+          password: school.demoPassword,
           role: "parent",
           avatar: "👪",
         });
@@ -311,8 +312,8 @@ export async function createStudent(formData: FormData) {
     db.users.push({
       id: sid,
       name,
-      email: str(formData, "email").toLowerCase() || `${name.split(" ")[0].toLowerCase()}.${sid.slice(-4)}@lifebuilders.test`,
-      password: "lifebuilders",
+      email: str(formData, "email").toLowerCase() || `${name.split(" ")[0].toLowerCase()}.${sid.slice(-4)}@${school.demoDomain}`,
+      password: school.demoPassword,
       role: "student",
       avatar: ["🐣", "🐢", "🦒", "🐧", "🐻", "🦓"][db.users.length % 6],
       classId: str(formData, "classId"),
@@ -358,7 +359,7 @@ export async function recordPayment(formData: FormData) {
     const pid = newId("pay");
     db.payments.push({
       id: pid,
-      receiptNo: `LB-${String(n).padStart(5, "0")}`,
+      receiptNo: `${school.receiptPrefix}-${String(n).padStart(5, "0")}`,
       studentId,
       term: db.settings.term,
       session: db.settings.session,

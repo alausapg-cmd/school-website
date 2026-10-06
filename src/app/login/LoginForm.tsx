@@ -1,13 +1,14 @@
 "use client";
 
 import { useActionState, useRef } from "react";
+import { school } from "@/lib/school";
 import { login } from "./actions";
 
 const demo = [
-  { label: "Pupil", who: "Zainab, Primary 4", email: "student@lifebuilders.test", emoji: "🦊", cls: "bg-sun-soft" },
-  { label: "Teacher", who: "Mrs Okafor", email: "teacher@lifebuilders.test", emoji: "🌻", cls: "bg-grass-soft" },
-  { label: "Parent", who: "Mrs Bello", email: "parent@lifebuilders.test", emoji: "👪", cls: "bg-sky-soft" },
-  { label: "Admin", who: "Head Teacher", email: "admin@lifebuilders.test", emoji: "👑", cls: "bg-grape-soft" },
+  { label: "Pupil", who: "Zainab, Primary 4", email: `student@${school.demoDomain}`, emoji: "🦊", cls: "bg-sun-soft" },
+  { label: "Teacher", who: "Mrs Okafor", email: `teacher@${school.demoDomain}`, emoji: "🌻", cls: "bg-grass-soft" },
+  { label: "Parent", who: "Mrs Bello", email: `parent@${school.demoDomain}`, emoji: "👪", cls: "bg-sky-soft" },
+  { label: "Admin", who: "Head Teacher", email: `admin@${school.demoDomain}`, emoji: "👑", cls: "bg-grape-soft" },
 ];
 
 export function LoginForm() {
@@ -17,7 +18,7 @@ export function LoginForm() {
   function quick(email: string) {
     const f = form.current!;
     (f.elements.namedItem("email") as HTMLInputElement).value = email;
-    (f.elements.namedItem("password") as HTMLInputElement).value = "lifebuilders";
+    (f.elements.namedItem("password") as HTMLInputElement).value = school.demoPassword;
     f.requestSubmit();
   }
 
@@ -26,7 +27,7 @@ export function LoginForm() {
       <form ref={form} action={action} className="space-y-4">
         <div>
           <label className="label" htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" required className="input" placeholder="you@lifebuilders.test" />
+          <input id="email" name="email" type="email" required className="input" placeholder={`you@${school.demoDomain}`} />
         </div>
         <div>
           <label className="label" htmlFor="password">Password</label>
@@ -38,7 +39,7 @@ export function LoginForm() {
         </button>
       </form>
       <div>
-        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: lifebuilders)</p>
+        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: {school.demoPassword})</p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {demo.map((d) => (
             <button

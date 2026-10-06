@@ -33,7 +33,7 @@ export default async function ReceiptPage({ params, searchParams }: PageProps<"/
       {sp.new && <Notice>✅ Payment saved. Print or share this receipt with the parent.</Notice>}
       <div className="card border-t-8 border-sky p-8 print:shadow-none print:ring-0">
         <div className="flex items-center gap-4 border-b-2 border-dashed border-ink/10 pb-4">
-          <Image src="/images/logo.png" alt="" width={64} height={64} className="h-16 w-16 rounded-full" />
+          <Image src={school.logo} alt="" width={64} height={64} className="h-16 w-16 rounded-full" />
           <div>
             <h1 className="text-xl font-bold leading-tight text-sky">{school.name.toUpperCase()}</h1>
             <p className="text-xs text-ink/60">{school.shortAddress} · {school.phones[0]}</p>

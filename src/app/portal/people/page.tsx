@@ -1,4 +1,5 @@
 import { SubmitButton } from "@/components/SubmitButton";
+import { school } from "@/lib/school";
 import { Notice, PageHeader } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { getDB } from "@/lib/db";
@@ -27,7 +28,7 @@ export default async function PeoplePage({ searchParams }: PageProps<"/portal/pe
           <div className="grid gap-4 sm:grid-cols-3">
             <div><label className="label">Full name</label><input name="name" required className="input" /></div>
             <div><label className="label">Email</label><input name="email" type="email" required className="input" /></div>
-            <div><label className="label">Starting password</label><input name="password" defaultValue="lifebuilders" className="input" /></div>
+            <div><label className="label">Starting password</label><input name="password" defaultValue={school.demoPassword} className="input" /></div>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div><label className="label">Phone</label><input name="phone" type="tel" className="input" /></div>

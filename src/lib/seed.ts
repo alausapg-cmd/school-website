@@ -1,4 +1,5 @@
 import type { AttendanceRecord, DB, FeeItem, Payment, Result, TimetableSlot, User } from "./types";
+import { school } from "@/lib/school";
 
 function daysFromNow(n: number) {
   const d = new Date();
@@ -17,7 +18,8 @@ function schoolDaysBack(count: number) {
   return days.reverse();
 }
 
-const PASSWORD = "lifebuilders";
+const PASSWORD = school.demoPassword;
+const DOMAIN = school.demoDomain;
 
 type Kid = readonly [name: string, avatar: string, gender: "Male" | "Female", boarding: boolean, dob: string];
 const p4: Kid[] = [
@@ -53,7 +55,7 @@ function family(): User[] {
         parent = {
           id: `par_${parents.size + 1}`,
           name: `${PARENT_TITLES[parents.size % PARENT_TITLES.length]} ${surname}`,
-          email: first ? "parent@lifebuilders.test" : `${surname.toLowerCase()}.family@lifebuilders.test`,
+          email: first ? `parent@${DOMAIN}` : `${surname.toLowerCase()}.family@${DOMAIN}`,
           password: PASSWORD,
           role: "parent",
           avatar: "👪",
@@ -68,13 +70,13 @@ function family(): User[] {
         avatar,
         role: "student",
         classId,
-        email: i === 0 && classId === "p4" ? "student@lifebuilders.test" : `${name.split(" ")[0].toLowerCase()}@lifebuilders.test`,
+        email: i === 0 && classId === "p4" ? `student@${DOMAIN}` : `${name.split(" ")[0].toLowerCase()}@${DOMAIN}`,
         password: PASSWORD,
         gender,
         boarding,
         dob,
         parentId: parent.id,
-        admissionNo: `LBIS/${classId === "p4" ? "2023" : "2022"}/${String(n++).padStart(3, "0")}`,
+        admissionNo: `${school.admissionPrefix}/${classId === "p4" ? "2023" : "2022"}/${String(n++).padStart(3, "0")}`,
         admittedOn: classId === "p4" ? "2023-09-11" : "2022-09-12",
         address: "Iyana Ilogbo, Ogun State",
       });
@@ -85,11 +87,11 @@ function family(): User[] {
 
 export function buildSeed(): DB {
   const users: User[] = [
-    { id: "adm_1", name: "Mrs Funmi Adeyemi", email: "admin@lifebuilders.test", password: PASSWORD, role: "admin", avatar: "👑" },
+    { id: "adm_1", name: "Mrs Funmi Adeyemi", email: `admin@${DOMAIN}`, password: PASSWORD, role: "admin", avatar: "👑" },
     {
       id: "tch_1",
       name: "Mrs Adaeze Okafor",
-      email: "teacher@lifebuilders.test",
+      email: `teacher@${DOMAIN}`,
       password: PASSWORD,
       role: "teacher",
       avatar: "🌻",
@@ -99,7 +101,7 @@ export function buildSeed(): DB {
     {
       id: "tch_2",
       name: "Mr Tunde Bakare",
-      email: "science@lifebuilders.test",
+      email: `science@${DOMAIN}`,
       password: PASSWORD,
       role: "teacher",
       avatar: "🔬",
@@ -168,7 +170,7 @@ export function buildSeed(): DB {
     parts.forEach((amount, k) => {
       payments.push({
         id: `pay_${receipt}`,
-        receiptNo: `LB-${String(receipt).padStart(5, "0")}`,
+        receiptNo: `${school.receiptPrefix}-${String(receipt).padStart(5, "0")}`,
         studentId: st.id,
         term: TERM,
         session: SESSION,

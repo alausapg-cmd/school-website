@@ -96,7 +96,7 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
 
       <article className="card border-t-8 border-sky p-6 sm:p-8 print:p-0 print:shadow-none print:ring-0">
         <header className="flex items-center gap-4 border-b-4 border-double border-sky/40 pb-4">
-          <Image src="/images/logo.png" alt="" width={80} height={80} className="h-20 w-20 rounded-full" />
+          <Image src={school.logo} alt="" width={80} height={80} className="h-20 w-20 rounded-full" />
           <div className="flex-1 text-center">
             <h1 className="text-xl font-bold leading-tight text-sky sm:text-2xl">{school.name.toUpperCase()}</h1>
             <p className="text-xs text-ink/60">{school.address}</p>

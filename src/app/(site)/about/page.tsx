@@ -54,7 +54,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-4xl px-4 py-14">
         <div className="card flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-          <Image src="/images/logo.png" alt="" width={112} height={112} className="h-28 w-28 shrink-0 rounded-full ring-4 ring-sun" />
+          <Image src={school.logo} alt="" width={112} height={112} className="h-28 w-28 shrink-0 rounded-full ring-4 ring-sun" />
           <div>
             <h2 className="text-3xl font-bold">Our motto</h2>
             <p className="mt-2 font-display text-2xl text-sky">&ldquo;{school.motto}&rdquo;</p>

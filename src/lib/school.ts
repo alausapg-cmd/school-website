@@ -8,6 +8,11 @@ export const school = {
   mission: "To raise a generation of competent and godly leaders for Nigeria.",
   approvals: ["Government approved", "WAEC", "NECO", "BECE"],
   logo: "/images/logo.png",
+  // Demo accounts, ID numbers and receipt numbers.
+  demoDomain: "lifebuilders.test",
+  demoPassword: "lifebuilders",
+  admissionPrefix: "LBIS",
+  receiptPrefix: "LB",
   address: "91 to 95 Igbusi Road, Christian Community Estate, Iyana Ilogbo Bus Stop, Lagos to Abeokuta Expressway, Ogun State",
   shortAddress: "91–95 Igbusi Road, Iyana Ilogbo, Ogun State",
   phones: ["0818 342 9256", "0703 836 7666", "0908 462 4719", "0703 661 6844", "0706 068 8180"],
