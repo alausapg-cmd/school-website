@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Empty, Stars, Stat, SubjectChip } from "@/components/ui";
+import { Empty, HootBanner, Stars, Stat, SubjectChip } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { getDB } from "@/lib/db";
 import { formatDate, today } from "@/lib/format";
@@ -42,11 +42,7 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
-        <div className="absolute -right-4 -top-6 text-[8rem] opacity-30" aria-hidden>{user.avatar}</div>
-        <h1 className="relative text-4xl font-bold">{greeting()}, {first}! 👋</h1>
-        <p className="relative mt-1 text-lg opacity-90">Ready for another awesome day of learning?</p>
-      </div>
+      <HootBanner title={<>{greeting()}, {first}! {user.avatar}</>} text="Hoo-hoo! Ready for another adventure in learning?" />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="⭐" value={stars} label="Stars collected" bg="bg-sun-soft" />
         <Stat emoji="✍️" value={due.length} label="Homework to do" bg="bg-coral-soft" />
@@ -106,7 +102,7 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
         </section>
       </div>
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">📒 New notes from your teachers</h2>
+        <h2 className="mb-4 text-2xl font-bold">📒 New notes from your teachers</h2>
         <div className="grid gap-4 md:grid-cols-3">
           {notes.map((n) => (
             <Link key={n.id} href={`/portal/notes/${n.id}`} className="card transition hover:-translate-y-1">
@@ -131,10 +127,10 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} {user.avatar}</h1>
-        <p className="text-ink/60">{db.settings.term}, {db.settings.session} · {classIds.map((c) => klass(c)?.name).join(", ")}</p>
-      </div>
+      <HootBanner
+        title={<>{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} {user.avatar}</>}
+        text={<>{db.settings.term}, {db.settings.session} · {classIds.map((c) => klass(c)?.name).join(", ")}</>}
+      />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="🧒" value={pupils} label="Pupils in my classes" bg="bg-sky-soft" />
         <Stat emoji="📝" value={toMark.length} label="Submissions to mark" bg="bg-coral-soft" />
@@ -145,12 +141,12 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
         <h2 className="mb-4 text-2xl font-semibold">⚡ Quick actions</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
-            ["/portal/notes#new", "📤", "Upload notes", "bg-sun"],
-            ["/portal/assignments#new", "✍️", "Set homework", "bg-coral"],
-            ["/portal/quizzes/new", "🧠", "Build a quiz", "bg-grape"],
-            ["/portal/attendance", "✅", "Take register", "bg-grass"],
+            ["/portal/notes#new", "📤", "Upload notes", "wood shadow-[0_5px_0_#4A2D12]"],
+            ["/portal/assignments#new", "✍️", "Set homework", "bg-coral text-white shadow-[0_5px_0_#7D0F3A]"],
+            ["/portal/quizzes/new", "🧠", "Build a quiz", "bg-grape text-white shadow-[0_5px_0_#3E1757]"],
+            ["/portal/attendance", "✅", "Take register", "bg-grass text-white shadow-[0_5px_0_#245A1C]"],
           ].map(([href, e, t, bg]) => (
-            <Link key={href} href={href} className={`${bg} rounded-3xl p-5 text-white transition hover:-translate-y-1 hover:rotate-1`}>
+            <Link key={href} href={href} className={`${bg} rounded-3xl p-5 transition hover:-translate-y-1 hover:rotate-1`}>
               <div className="text-4xl">{e}</div>
               <div className="mt-2 font-display text-lg font-semibold">{t}</div>
             </Link>
@@ -206,13 +202,13 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
   const kids = childrenOf(db, user);
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
-        <h1 className="text-4xl font-bold">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} 👋</h1>
-        <p className="mt-1 text-lg opacity-90">
+      <HootBanner
+        title={<>{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} 👋</>}
+        text={<>
           {db.settings.term}, {db.settings.session}
           {db.settings.termEnds ? ` · Term ends ${formatDate(db.settings.termEnds, { day: "numeric", month: "long" })}` : ""}
-        </p>
-      </div>
+        </>}
+      />
       <section>
         <h2 className="mb-4 text-2xl font-semibold">👧🏽 My children</h2>
         {kids.length ? (
@@ -280,10 +276,7 @@ function AdminHome({ db }: { db: DB }) {
   const pct = billed ? Math.round((paid / billed) * 100) : 0;
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">School overview 👑</h1>
-        <p className="text-ink/60">{school.name} · {db.settings.term}, {db.settings.session}</p>
-      </div>
+      <HootBanner title="School overview 👑" text={<>{school.name} · {db.settings.term}, {db.settings.session}</>} />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="🧒" value={pupils.length} label={`Pupils (${boarders} boarders)`} bg="bg-sky-soft" />
         <Stat emoji="👩‍🏫" value={count("teacher")} label="Teachers" bg="bg-grass-soft" />
@@ -298,8 +291,8 @@ function AdminHome({ db }: { db: DB }) {
           </div>
           <Link href="/portal/fees" className="btn-ghost px-4 py-2 text-sm">Open fees</Link>
         </div>
-        <div className="mt-4 h-5 overflow-hidden rounded-full bg-cream">
-          <div className="h-full rounded-full bg-grass" style={{ width: `${pct}%` }} />
+        <div className="mt-4 h-5 overflow-hidden rounded-full bg-cream ring-2 ring-wood/15">
+          <div className="h-full rounded-full bg-[linear-gradient(90deg,#3A8A2E,#7CC24A)]" style={{ width: `${pct}%` }} />
         </div>
         <p className="mt-1 text-right text-sm font-semibold">{pct}% collected</p>
       </section>

@@ -8,18 +8,19 @@ export function ContactForm() {
     return (
       <div className="card text-center">
         <div className="text-6xl">💌</div>
-        <h3 className="mt-2 text-2xl font-semibold">Thank you!</h3>
+        <h3 className="mt-2 text-2xl font-bold">Hoo-ray, message received!</h3>
         <p className="text-ink/70">We&apos;ll get back to you within two school days.</p>
       </div>
     );
   return (
     <form
-      className="card space-y-4"
+      className="card h-fit space-y-4 border-t-8 border-coral"
       onSubmit={(e) => {
         e.preventDefault();
         setSent(true);
       }}
     >
+      <h2 className="text-2xl font-extrabold">🦉 Send Professor Hoot a note</h2>
       <div>
         <label className="label" htmlFor="name">Your name</label>
         <input id="name" required className="input" />
@@ -42,7 +43,7 @@ export function ContactForm() {
         <label className="label" htmlFor="msg">Message</label>
         <textarea id="msg" rows={4} required className="input" />
       </div>
-      <button className="btn-primary w-full">Send message ✈️</button>
+      <button className="btn-berry w-full">Send message 🍃</button>
     </form>
   );
 }

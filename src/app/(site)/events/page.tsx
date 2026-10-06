@@ -12,14 +12,18 @@ export default async function EventsPage() {
   const past = db.events.filter((e) => e.date < now).sort((a, b) => b.date.localeCompare(a.date));
   return (
     <>
-      <PageHero emoji="🎉" title="Events" text="Fun days, big celebrations and important dates for families." color="bg-grape" />
-      <section className="mx-auto max-w-4xl space-y-4 px-4 py-12">
-        <h2 className="text-3xl font-bold">Coming up</h2>
-        {upcoming.length ? upcoming.map((e) => <EventCard key={e.id} event={e} />) : <p>No upcoming events yet.</p>}
+      <PageHero emoji="🎪" title="Events" kicker="Adventures ahead" text="Fun days, big celebrations and important dates for Owlberry families." color="bg-grape" fruit="berry" />
+      <section className="mx-auto max-w-4xl px-4 py-12">
+        <h2 className="text-3xl font-extrabold">🌿 Coming up</h2>
+        <div className="relative mt-5 space-y-5 border-l-4 border-dashed border-grass/50 pl-5 sm:pl-8">
+          {upcoming.length ? upcoming.map((e) => <EventCard key={e.id} event={e} />) : <p>No upcoming events yet.</p>}
+        </div>
         {past.length > 0 && (
           <>
-            <h2 className="pt-8 text-3xl font-bold">What we&apos;ve done</h2>
-            {past.map((e) => <EventCard key={e.id} event={e} past />)}
+            <h2 className="pt-12 text-3xl font-extrabold">🍂 What we&apos;ve done</h2>
+            <div className="mt-5 space-y-5 border-l-4 border-dashed border-wood/30 pl-5 sm:pl-8">
+              {past.map((e) => <EventCard key={e.id} event={e} past />)}
+            </div>
           </>
         )}
       </section>

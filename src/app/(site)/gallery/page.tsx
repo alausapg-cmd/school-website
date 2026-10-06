@@ -1,36 +1,25 @@
-import Image from "next/image";
 import { PageHero } from "@/components/PageHero";
+import { GALLERY } from "@/components/Scenes";
 
 export const metadata = { title: "Gallery" };
 
-const photos = [
-  { src: "/images/building.jpg", w: 664, h: 336, caption: "Our school building" },
-  { src: "/images/girls.jpg", w: 416, h: 310, caption: "Smart in our uniforms" },
-  { src: "/images/pupils.jpg", w: 226, h: 258, caption: "Our little ones" },
-  { src: "/images/play.jpg", w: 188, h: 258, caption: "Fun at the playground" },
-];
-const coming = [
-  { emoji: "🙏", caption: "Thanksgiving service", bg: "bg-sky-soft" },
-  { emoji: "🏃", caption: "Inter-house sports", bg: "bg-sun-soft" },
-  { emoji: "🎓", caption: "Graduation day", bg: "bg-grass-soft" },
-  { emoji: "🎄", caption: "Carol service", bg: "bg-coral-soft" },
-];
+const TILT = ["-rotate-1", "rotate-1", "rotate-0", "-rotate-2", "rotate-2", "-rotate-1", "rotate-1", "rotate-0"];
 
 export default function GalleryPage() {
   return (
     <>
-      <PageHero emoji="📸" title="Gallery" text="Moments from life at Life Builders." color="bg-grass" />
-      <section className="mx-auto max-w-6xl columns-1 gap-5 px-4 py-12 sm:columns-2 lg:columns-3">
-        {photos.map((p) => (
-          <figure key={p.src} className="card mb-5 break-inside-avoid overflow-hidden p-0">
-            <Image src={p.src} alt={p.caption} width={p.w} height={p.h} className="w-full" />
-            <figcaption className="px-5 py-3 font-display font-semibold">{p.caption}</figcaption>
-          </figure>
-        ))}
-        {coming.map((p) => (
-          <figure key={p.caption} className={`mb-5 break-inside-avoid overflow-hidden rounded-3xl ${p.bg}`}>
-            <div className="grid h-48 place-items-center text-7xl">{p.emoji}</div>
-            <figcaption className="bg-white/70 px-5 py-3 font-display font-semibold">{p.caption} <span className="text-sm font-normal text-ink/50">· photos coming soon</span></figcaption>
+      <PageHero emoji="🖼️" title="Gallery" kicker="Snapshots from the jungle" text="Scenes from life at Owlberry, painted by our art club's favourite owl." color="bg-grass" fruit="berry" />
+      <section className="mx-auto grid max-w-6xl gap-7 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
+        {GALLERY.map(({ Scene, caption, text, tone }, i) => (
+          <figure key={caption} className={`group relative ${TILT[i]} transition hover:rotate-0 hover:-translate-y-1`}>
+            <span className="absolute -top-3 left-1/2 z-10 h-6 w-16 -translate-x-1/2 rotate-2 rounded-sm bg-sun/80 shadow" aria-hidden />
+            <div className={`rounded-[1.5rem] ${tone} p-3 pb-0 shadow-[0_8px_0_rgba(90,56,24,0.12)] ring-2 ring-wood/10`}>
+              <div className="overflow-hidden rounded-2xl ring-2 ring-white"><Scene /></div>
+              <figcaption className="px-2 py-3">
+                <span className="block font-display text-lg font-bold">{caption}</span>
+                <span className="text-sm text-ink/70">{text}</span>
+              </figcaption>
+            </div>
           </figure>
         ))}
       </section>

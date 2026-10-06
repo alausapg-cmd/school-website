@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { OwlMark } from "@/components/Owl";
 import { PrintButton } from "@/components/PrintButton";
 import { Empty } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
@@ -94,12 +94,13 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
         </div>
       </div>
 
-      <article className="card border-t-8 border-sky p-6 sm:p-8 print:p-0 print:shadow-none print:ring-0">
+      <article className="card border-t-8 border-sky p-6 sm:p-8 print:rounded-none print:border-t-4 print:p-0 print:shadow-none print:ring-0">
         <header className="flex items-center gap-4 border-b-4 border-double border-sky/40 pb-4">
-          <Image src={school.logo} alt="" width={80} height={80} className="h-20 w-20 rounded-full" />
+          <OwlMark className="h-20 w-20 shrink-0" />
           <div className="flex-1 text-center">
             <h1 className="text-xl font-bold leading-tight text-sky sm:text-2xl">{school.name.toUpperCase()}</h1>
             <p className="text-xs text-ink/60">{school.address}</p>
+            <p className="text-xs text-ink/60">{school.phones.join(" · ")} · {school.email}</p>
             <p className="text-xs italic text-ink/60">Motto: {school.motto}</p>
             <p className="mt-2 inline-block rounded-full bg-sun px-4 py-0.5 font-display text-sm font-bold text-ink">
               TERMLY REPORT · {rep.term.toUpperCase()}, {rep.session}
@@ -175,7 +176,7 @@ export default async function ReportPage({ params, searchParams }: PageProps<"/p
           <p className="w-40 border-t border-ink/30 pt-1 text-center">Class teacher</p>
           <p className="w-40 border-t border-ink/30 pt-1 text-center">Head teacher &amp; stamp</p>
         </div>
-        <p className="mt-6 text-center font-display text-sm text-sky">{school.tagline}</p>
+        <p className="mt-6 text-center font-display text-sm text-sky">🌿 {school.tagline} · {school.motto} 🌿</p>
       </article>
     </div>
   );

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { OwlMark } from "@/components/Owl";
 import { PrintButton } from "@/components/PrintButton";
 import { Notice } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
@@ -31,16 +31,16 @@ export default async function ReceiptPage({ params, searchParams }: PageProps<"/
         <PrintButton label="🖨️ Print receipt" />
       </div>
       {sp.new && <Notice>✅ Payment saved. Print or share this receipt with the parent.</Notice>}
-      <div className="card border-t-8 border-sky p-8 print:shadow-none print:ring-0">
-        <div className="flex items-center gap-4 border-b-2 border-dashed border-ink/10 pb-4">
-          <Image src={school.logo} alt="" width={64} height={64} className="h-16 w-16 rounded-full" />
+      <div className="card border-t-8 border-sky p-6 sm:p-8 print:rounded-none print:border-t-4 print:shadow-none print:ring-0">
+        <div className="flex flex-wrap items-center gap-4 border-b-2 border-dashed border-ink/10 pb-4">
+          <OwlMark className="h-16 w-16 shrink-0" />
           <div>
             <h1 className="text-xl font-bold leading-tight text-sky">{school.name.toUpperCase()}</h1>
             <p className="text-xs text-ink/60">{school.shortAddress} · {school.phones[0]}</p>
           </div>
           <div className="ml-auto text-right">
             <p className="font-display text-lg font-bold text-coral">RECEIPT</p>
-            <p className="font-mono text-sm">{p.receiptNo}</p>
+            <p className="whitespace-nowrap font-mono text-sm">{p.receiptNo}</p>
           </div>
         </div>
         <dl className="grid grid-cols-2 gap-y-2 py-5 text-sm">

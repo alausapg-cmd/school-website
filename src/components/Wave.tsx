@@ -1,4 +1,7 @@
+// A bushy, leafy edge between sections (the colour comes from the text colour).
 export function Wave({ className = "", flip = false }: { className?: string; flip?: boolean }) {
+  const back = Array.from({ length: 16 }, () => "a 45 45 0 0 1 90 0").join(" ");
+  const front = Array.from({ length: 24 }, (_, i) => (i % 2 ? "a 30 26 0 0 1 60 0" : "a 30 34 0 0 1 60 0")).join(" ");
   return (
     <svg
       viewBox="0 0 1440 80"
@@ -6,10 +9,8 @@ export function Wave({ className = "", flip = false }: { className?: string; fli
       className={`block h-10 w-full sm:h-16 ${flip ? "rotate-180" : ""} ${className}`}
       aria-hidden
     >
-      <path
-        fill="currentColor"
-        d="M0,40 C120,70 240,10 360,30 C480,50 600,80 720,60 C840,40 960,0 1080,20 C1200,40 1320,70 1440,50 L1440,80 L0,80 Z"
-      />
+      <path fill="#7CC24A" opacity="0.5" d={`M-20 80 L-20 52 ${back} L1460 80 Z`} />
+      <path fill="currentColor" d={`M0 80 L0 62 ${front} L1440 80 Z`} />
     </svg>
   );
 }

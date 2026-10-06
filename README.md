@@ -1,6 +1,6 @@
-# Life Builders International Schools: website + school management system
+# Owlberry International School: website + school management system
 
-A colourful school website (Home, About, News, Events, Gallery, Contact) joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
+A treehouse-jungle themed school website for a fictional school (Home, About, News, Events, Gallery, Admissions, Apply), joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
 
 School management features:
 
@@ -13,7 +13,7 @@ School management features:
 - **Printable report cards**: subjects, CA/exam, grades, average, position, remarks and next-term date.
 - **Settings**: current term and session, term dates, classes and subjects.
 
-School details (name, address, phones, motto) live in `src/lib/school.ts`; logo and photos are in `public/images/`.
+School details (name, address, phones, motto) live in `src/lib/school.ts`; the logo is `public/images/logo.svg`, and every illustration (the treehouse, Professor Hoot the owl, gallery scenes) is drawn in SVG in `src/components/`.
 
 ## Run it
 
@@ -22,15 +22,15 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-### Demo logins (password for all: `lifebuilders`)
+### Demo logins (password for all: `owlberry`)
 
 | Who | Email |
 |---|---|
-| Pupil (Zainab, Primary 4) | student@lifebuilders.test |
-| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@lifebuilders.test |
-| Teacher (Mr Bakare: Science, Computer, Arts) | science@lifebuilders.test |
-| Parent (Mrs Bello: Zainab and Kemi) | parent@lifebuilders.test |
-| Admin (Head Teacher) | admin@lifebuilders.test |
+| Pupil (Zainab, Primary 4 Acacia) | student@owlberry.test |
+| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@owlberry.test |
+| Teacher (Mr Bakare: Science, Computer, Arts) | science@owlberry.test |
+| Parent (Mrs Bello: Zainab and Kemi) | parent@owlberry.test |
+| Admin (Head Teacher) | admin@owlberry.test |
 
 The login page also has one-tap demo buttons.
 

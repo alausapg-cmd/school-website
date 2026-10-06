@@ -35,7 +35,7 @@ export function LoginForm() {
         </div>
         {error && <p className="rounded-2xl bg-coral-soft px-4 py-2 text-sm font-semibold text-coral">{error}</p>}
         <button disabled={pending} className="btn-primary w-full text-lg">
-          {pending ? "Opening…" : "Let's go! 🚀"}
+          {pending ? "Climbing up…" : "Let's go! 🌿"}
         </button>
       </form>
       <div>
@@ -47,7 +47,7 @@ export function LoginForm() {
               type="button"
               disabled={pending}
               onClick={() => quick(d.email)}
-              className={`rounded-2xl ${d.cls} p-3 text-center transition hover:-translate-y-0.5`}
+              className={`rounded-2xl ${d.cls} p-3 text-center ring-2 ring-wood/10 transition hover:-translate-y-0.5 hover:rotate-1`}
             >
               <div className="text-3xl">{d.emoji}</div>
               <div className="font-display font-semibold">{d.label}</div>

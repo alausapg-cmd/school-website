@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="256" height="256">
+  <title>Owlberry International School</title>
+  <circle cx="32" cy="32" r="31" fill="#1D6B42"/>
+  <path d="M32 3 C 20 8, 14 16, 16 24 C 24 20, 30 12, 32 3 Z" fill="#7CC24A"/>
+  <path d="M32 3 C 44 8, 50 16, 48 24 C 40 20, 34 12, 32 3 Z" fill="#3A8A2E"/>
+  <path d="M17 26 L13 13 L25 21 Z M47 26 L51 13 L39 21 Z" fill="#4E1F6B"/>
+  <ellipse cx="32" cy="38" rx="19" ry="20" fill="#6A2C91"/>
+  <ellipse cx="32" cy="46" rx="11" ry="10" fill="#EBDDF5"/>
+  <circle cx="25" cy="32" r="7.5" fill="#FFF6DD" stroke="#FFB320" stroke-width="2"/>
+  <circle cx="39" cy="32" r="7.5" fill="#FFF6DD" stroke="#FFB320" stroke-width="2"/>
+  <circle cx="25.5" cy="33" r="3.6" fill="#2A1C12"/>
+  <circle cx="38.5" cy="33" r="3.6" fill="#2A1C12"/>
+  <circle cx="27" cy="31.5" r="1.2" fill="#fff"/>
+  <circle cx="40" cy="31.5" r="1.2" fill="#fff"/>
+  <path d="M29.5 38 L34.5 38 L32 43 Z" fill="#FFB320"/>
+  <circle cx="49" cy="50" r="4" fill="#C2185B"/>
+  <circle cx="54" cy="45" r="3.4" fill="#6A2C91"/>
+  <circle cx="45" cy="55" r="3" fill="#C2185B"/>
+</svg>
