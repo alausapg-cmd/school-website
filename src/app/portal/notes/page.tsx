@@ -92,7 +92,7 @@ export default async function NotesPage({ searchParams }: PageProps<"/portal/not
           })}
         </div>
       ) : (
-        <Empty emoji="📭" text="No notes here yet." />
+        <Empty emoji="📭" text="No notes have landed here yet." />
       )}
     </div>
   );

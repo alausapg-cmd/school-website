@@ -15,7 +15,7 @@ export default async function TimetablePage({ searchParams }: PageProps<"/portal
   const sp = await searchParams;
   const { subject, klass } = lookups(db);
   const classIds = user.role === "parent" ? [...new Set(childrenOf(db, user).map((c) => c.classId!))] : classIdsFor(user, db);
-  if (!classIds.length) return <Empty emoji="🗓️" text="No class timetable to show yet." />;
+  if (!classIds.length) return <Empty emoji="🗓️" text="No flight plan (timetable) to show yet." />;
   const classId = typeof sp.class === "string" && classIds.includes(sp.class) ? sp.class : classIds[0];
   const slot = (day: number, period: number) => db.timetable.find((t) => t.classId === classId && t.day === day && t.period === period);
   const editing = user.role === "admin" && sp.edit === "1";

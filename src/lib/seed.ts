@@ -78,7 +78,7 @@ function family(): User[] {
         parentId: parent.id,
         admissionNo: `${school.admissionPrefix}/${classId === "p4" ? "2023" : "2022"}/${String(n++).padStart(3, "0")}`,
         admittedOn: classId === "p4" ? "2023-09-11" : "2022-09-12",
-        address: "Iyana Ilogbo, Ogun State",
+        address: "Lekki Phase 1, Lagos",
       });
     });
   }
@@ -87,7 +87,7 @@ function family(): User[] {
 
 export function buildSeed(): DB {
   const users: User[] = [
-    { id: "adm_1", name: "Mrs Funmi Adeyemi", email: `admin@${DOMAIN}`, password: PASSWORD, role: "admin", avatar: "👑" },
+    { id: "adm_1", name: "Mrs Funmi Adeyemi", email: `admin@${DOMAIN}`, password: PASSWORD, role: "admin", avatar: "🧑‍🚀" },
     {
       id: "tch_1",
       name: "Mrs Adaeze Okafor",
@@ -140,7 +140,7 @@ export function buildSeed(): DB {
         session: "2025/2026",
         ca,
         exam,
-        comment: ca + exam >= 70 ? "Brilliant work, keep shining!" : ca + exam >= 50 ? "Good effort, keep it up." : "Let's practise a bit more together.",
+        comment: ca + exam >= 70 ? "Stellar work, keep shining!" : ca + exam >= 50 ? "Good effort, keep climbing." : "Let's practise a bit more together.",
       });
     });
   });
@@ -153,7 +153,7 @@ export function buildSeed(): DB {
     { id: "fee_3", name: "Books & stationery", amount: 15000, classId: "all", term: TERM, session: SESSION },
     { id: "fee_4", name: "Development levy", amount: 10000, classId: "all", term: TERM, session: SESSION },
     { id: "fee_5", name: "PTA levy", amount: 5000, classId: "all", term: TERM, session: SESSION },
-    { id: "fee_6", name: "Boarding & feeding", amount: 150000, classId: "all", term: TERM, session: SESSION, boardingOnly: true },
+    { id: "fee_6", name: "Extended day club & snacks", amount: 45000, classId: "all", term: TERM, session: SESSION, boardingOnly: true },
   ];
   const payPlan = [1, 0.5, 1, 0, 1, 0.6, 1, 0.4, 1, 1, 0, 0.75];
   const payments: Payment[] = [];
@@ -206,29 +206,29 @@ export function buildSeed(): DB {
     payments,
     timetable,
     notices: [
-      { id: "ntc_1", title: "Mid-term break", body: "Mid-term break runs from Thursday 29th October to Monday 2nd November. Boarders will be released after classes on Wednesday. School resumes Tuesday 3rd November.", audience: "everyone", date: daysFromNow(-2), authorId: "adm_1", pinned: true },
-      { id: "ntc_2", title: "School fees reminder", body: "Parents with outstanding first term fees are kindly reminded to complete payment before mid-term. Please send your proof of payment to the school office or show it at the bursary.", audience: "parents", date: daysFromNow(-5), authorId: "adm_1" },
+      { id: "ntc_1", title: "Mid-term break", body: "Mid-term break runs from Thursday 29th October to Monday 2nd November. Extended day club will close at 2:30pm on Wednesday 28th. School resumes on Tuesday 3rd November.", audience: "everyone", date: daysFromNow(-2), authorId: "adm_1", pinned: true },
+      { id: "ntc_2", title: "School fees reminder", body: "Parents with outstanding first term fees are kindly reminded to complete payment before mid-term. Please send your proof of payment to the school office or show it at the bursary window by the main gate.", audience: "parents", date: daysFromNow(-5), authorId: "adm_1" },
       { id: "ntc_3", title: "Staff meeting on Friday", body: "All teaching staff should attend the staff meeting on Friday at 2:30pm in the staff room. Please bring your scheme of work and lesson notes for the term.", audience: "staff", date: daysFromNow(-1), authorId: "adm_1" },
-      { id: "ntc_4", title: "Inter-house sports practice", body: "Sports practice holds every Wednesday after lunch. Come with your house T-shirt and canvas shoes.", audience: "students", date: daysFromNow(-3), authorId: "tch_2" },
+      { id: "ntc_4", title: "Planet sports day practice", body: "Sports practice holds every Wednesday after lunch. Come with your team T-shirt (Team Orion or Team Lyra) and canvas shoes.", audience: "students", date: daysFromNow(-3), authorId: "tch_2" },
     ],
     applications: [
-      { id: "app_1", childName: "Esther Adebayo", gender: "Female", dob: "2018-05-12", classWanted: "Primary 3", boarding: false, parentName: "Mrs Bola Adebayo", phone: "0802 555 1234", email: "bola.adebayo@example.com", address: "Ifo, Ogun State", previousSchool: "Grace Nursery & Primary School", status: "pending", note: "", createdAt: daysFromNow(-1) },
-      { id: "app_2", childName: "Daniel Okon", gender: "Male", dob: "2014-02-03", classWanted: "JSS 1", boarding: true, parentName: "Mr Ime Okon", phone: "0813 222 9876", email: "ime.okon@example.com", address: "Ikeja, Lagos", previousSchool: "Bright Stars Primary School", status: "exam booked", note: "Entrance exam booked for Saturday.", createdAt: daysFromNow(-6) },
-      { id: "app_3", childName: "Hannah Lawal", gender: "Female", dob: "2016-10-22", classWanted: "Primary 5", boarding: false, parentName: "Dr Kunle Lawal", phone: "0809 111 4567", email: "kunle.lawal@example.com", address: "Iyana Ilogbo, Ogun State", previousSchool: "Covenant Kids Academy", status: "admitted", note: "Passed entrance exam. Admission letter sent.", createdAt: daysFromNow(-15) },
+      { id: "app_1", childName: "Esther Adebayo", gender: "Female", dob: "2018-05-12", classWanted: "Primary 3", boarding: false, parentName: "Mrs Bola Adebayo", phone: "0802 555 1234", email: "bola.adebayo@example.com", address: "Ajah, Lagos", previousSchool: "Little Acorns Nursery", status: "pending", note: "", createdAt: daysFromNow(-1) },
+      { id: "app_2", childName: "Daniel Okon", gender: "Male", dob: "2020-02-03", classWanted: "Primary 1", boarding: true, parentName: "Mr Ime Okon", phone: "0813 222 9876", email: "ime.okon@example.com", address: "Ikoyi, Lagos", previousSchool: "Sunny Steps Playgroup", status: "exam booked", note: "Assessment morning booked for Saturday.", createdAt: daysFromNow(-6) },
+      { id: "app_3", childName: "Hannah Lawal", gender: "Female", dob: "2016-10-22", classWanted: "Primary 5", boarding: false, parentName: "Dr Kunle Lawal", phone: "0809 111 4567", email: "kunle.lawal@example.com", address: "Lekki Phase 1, Lagos", previousSchool: "Rainbow Kids Academy", status: "admitted", note: "Lovely assessment morning. Admission letter sent.", createdAt: daysFromNow(-15) },
     ],
     users,
     classes: [
-      { id: "p4", name: "Primary 4 Faith", emoji: "🌱" },
-      { id: "p5", name: "Primary 5 Grace", emoji: "🕊️" },
+      { id: "p4", name: "Primary 4 Orion", emoji: "🌌" },
+      { id: "p5", name: "Primary 5 Lyra", emoji: "🎶" },
     ],
     subjects: [
-      { id: "maths", name: "Mathematics", emoji: "🔢", color: "#3B82F6" },
-      { id: "english", name: "English", emoji: "📖", color: "#EF5DA8" },
-      { id: "science", name: "Basic Science", emoji: "🔬", color: "#22C55E" },
-      { id: "social", name: "Social Studies", emoji: "🌍", color: "#F59E0B" },
-      { id: "arts", name: "Creative Arts", emoji: "🎨", color: "#A855F7" },
-      { id: "computer", name: "Computer Studies", emoji: "💻", color: "#06B6D4" },
-      { id: "crs", name: "Christian Religious Studies", emoji: "✝️", color: "#157A3C" },
+      { id: "maths", name: "Mathematics", emoji: "🔢", color: "#3A3FBF" },
+      { id: "english", name: "English", emoji: "📖", color: "#D63F7A" },
+      { id: "science", name: "Basic Science", emoji: "🔬", color: "#0B8A7E" },
+      { id: "social", name: "Social Studies", emoji: "🌍", color: "#C46A00" },
+      { id: "arts", name: "Creative Arts", emoji: "🎨", color: "#7A4FD6" },
+      { id: "computer", name: "Computer Studies", emoji: "💻", color: "#0E7FA6" },
+      { id: "crs", name: "Civic & Moral Education", emoji: "🤝", color: "#DF5418" },
     ],
     notes: [
       {
@@ -362,38 +362,47 @@ export function buildSeed(): DB {
     news: [
       {
         id: "news_1",
-        title: "Admission in progress into all classes 🎒",
-        summary: "Admission for the 2026/2027 session is still open. Call the school office to book an entrance examination.",
-        body: "We are happy to welcome new families to Life Builders International Schools for the 2026/2027 session. Admission is in progress into all classes, for both day and boarding pupils.\n\nOur entrance examinations held on July 11th, August 1st, August 22nd and September 5th. If you missed these dates, please call 0703 661 6844 or 0706 068 8180 to arrange an assessment for your child.",
+        title: "Admissions open for 2026/2027 🚀",
+        summary: "Places are open in creche, nursery and primary classes. Book an assessment morning for your young explorer.",
+        body: "We are excited to welcome new families to Novaridge Academy for the 2026/2027 session. Places are open from creche right through to Primary 6.\n\nOur assessment mornings are relaxed and friendly: children spend time with a teacher, play, read and solve a few puzzles while parents tour the school. Call 0800 000 1101 or apply online to book a morning that suits you.",
         date: daysFromNow(-3),
-        emoji: "🎒",
-        color: "#157A3C",
+        emoji: "🚀",
+        color: "#DF5418",
       },
       {
         id: "news_2",
-        title: "Welcome back for First Term",
-        summary: "A warm welcome to new and returning pupils, day and boarding, for the 2026/2027 session.",
-        body: "We give God all the glory for a new session! We welcome back all our pupils and say a special welcome to our new day and boarding pupils.\n\nParents are reminded that pupils should be in school by 7:30am, neatly dressed in full school uniform.",
+        title: "Welcome back, explorers!",
+        summary: "A warm welcome to new and returning pupils for First Term, with a brand new reading nook to explore.",
+        body: "Welcome back to a brand new session! We are thrilled to see so many smiling faces, and a special welcome to the children joining our crew for the first time.\n\nThis term every class will visit our new moon-themed reading nook in the library. Please remember that the school gate opens at 7:30am and morning circle begins at 8:00am.",
         date: daysFromNow(-20),
-        emoji: "🙏",
-        color: "#F5B800",
+        emoji: "🌍",
+        color: "#3A3FBF",
       },
       {
         id: "news_3",
-        title: "Boarding at Life Builders: a home away from home 🏠",
-        summary: "Our boarding pupils enjoy supervised study, devotion and plenty of fun in a safe, caring environment.",
-        body: "Boarding at Life Builders gives pupils a structured day of lessons, supervised evening study, devotion and recreation, under the care of dedicated house parents.\n\nTo find out more about boarding places, please call the school office or visit us at Igbusi Road, Iyana Ilogbo.",
-        date: daysFromNow(-40),
-        emoji: "🏠",
-        color: "#D7263D",
+        title: "Our rooftop observatory is open 🔭",
+        summary: "Thanks to our parents' association, every class now has a telescope session each half term.",
+        body: "After months of building, our rooftop mini observatory is officially open! The dome houses a child-friendly telescope and a big star map painted by the art club.\n\nEach class will have a daytime session looking at the sun safely through a special filter, and families are invited to our evening stargazing nights. A huge thank you to our parents' association for making it happen.",
+        date: daysFromNow(-34),
+        emoji: "🔭",
+        color: "#7A4FD6",
+      },
+      {
+        id: "news_4",
+        title: "Primary 5 Lyra breaks the water-rocket record",
+        summary: "A bottle rocket built by Primary 5 flew higher than the school flagpole at our science week launch.",
+        body: "Science week ended with a bang, or rather a whoosh! Teams from every primary class designed water rockets from plastic bottles, card and plenty of tape.\n\nPrimary 5 Lyra's rocket, nicknamed Little Nova, soared above the flagpole and set a new school record. Well done to every engineer who took part.",
+        date: daysFromNow(-48),
+        emoji: "💧",
+        color: "#0B8A7E",
       },
     ],
     events: [
-      { id: "evt_1", title: "Independence Day Cultural Celebration", date: daysFromNow(4), time: "9:00am", location: "School field", description: "Pupils come dressed in cultural attire for songs, dances and food from across Nigeria.", emoji: "🇳🇬" },
-      { id: "evt_2", title: "Mid-term Thanksgiving Service", date: daysFromNow(11), time: "10:00am", location: "School hall", description: "Parents are welcome to join us as we thank God for the term so far.", emoji: "🙏" },
-      { id: "evt_3", title: "Open Day for Parents", date: daysFromNow(18), time: "10:00am to 1:00pm", location: "All classrooms", description: "Meet your child's teachers, see their work and tour the boarding house.", emoji: "👨‍👩‍👧" },
-      { id: "evt_4", title: "Carol Service and End of Term", date: daysFromNow(60), time: "12:00pm", location: "School hall", description: "Carols, a nativity play and prize giving to close the term.", emoji: "🎄" },
-      { id: "evt_5", title: "Entrance Examination", date: "2026-09-05", time: "9:00am", location: "School hall", description: "Final 2026/2027 entrance examination for new pupils.", emoji: "📝" },
+      { id: "evt_1", title: "Independence Day Cultural Celebration", date: daysFromNow(4), time: "9:00am", location: "School field", description: "Explorers come dressed in cultural attire for songs, dances and food from across Nigeria.", emoji: "🇳🇬" },
+      { id: "evt_2", title: "Family Stargazing Night", date: daysFromNow(11), time: "6:30pm to 8:00pm", location: "Rooftop observatory", description: "Bring a blanket and look at the moon and planets through our telescope. Hot chocolate provided!", emoji: "🔭" },
+      { id: "evt_3", title: "Open Day for Parents", date: daysFromNow(18), time: "10:00am to 1:00pm", location: "All classrooms", description: "Meet your child's teachers, see their work and tour the science lab and star garden.", emoji: "👨‍👩‍👧" },
+      { id: "evt_4", title: "Cosmic Concert and Prize Giving", date: daysFromNow(60), time: "11:00am", location: "School hall", description: "Songs, a space play by the nursery and prizes for our brightest stars to close the term.", emoji: "🎶" },
+      { id: "evt_5", title: "Entrance Assessment Morning", date: "2026-09-05", time: "9:00am", location: "Reception classrooms", description: "Final 2026/2027 assessment morning for new pupils.", emoji: "📝" },
     ],
   };
 }

@@ -26,7 +26,7 @@ export default async function NoticesPage() {
 
   return (
     <div>
-      <PageHeader emoji="📢" title="Notice board" text="Announcements from the school to parents, pupils and staff." />
+      <PageHeader emoji="📡" title="Notice board" text="Announcements from the school to parents, pupils and staff." />
       {canPost && (
         <details className="card mb-8" id="new">
           <summary className="cursor-pointer font-display text-xl font-semibold">➕ Post a notice</summary>
@@ -73,7 +73,7 @@ export default async function NoticesPage() {
           })}
         </div>
       ) : (
-        <Empty emoji="📭" text="No notices yet." />
+        <Empty emoji="📭" text="No transmissions yet. All quiet on the radio." />
       )}
     </div>
   );

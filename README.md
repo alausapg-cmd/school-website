@@ -1,10 +1,12 @@
-# Life Builders International Schools: website + school management system
+# Novaridge Academy: website + school management system
 
-A colourful school website (Home, About, News, Events, Gallery, Contact) joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
+Novaridge Academy is a **fictional** nursery and primary day school with a space-explorer theme ("Reach for the stars, one lesson at a time"). All names, addresses, phone numbers and pupils are made up.
+
+A space-themed school website (Home, About, News, Events, Gallery, Contact) joined to a learning portal where teachers share notes, set assignments and quizzes, take attendance and enter results, and pupils learn, hand in work and see their report cards.
 
 School management features:
 
-- **Student records**: enrolment with automatic admission numbers, day/boarding, parent links, full pupil profiles.
+- **Student records**: enrolment with automatic admission numbers, standard or extended day plan, parent links, full pupil profiles.
 - **School fees**: fee lists per class and term, recording payments with printable receipts, debtors list, collection totals.
 - **Parent portal**: each parent sees their children's attendance, results, homework, fees and receipts, timetable and notices.
 - **Online admissions**: a public Apply page; the office reviews applications and tracks status.
@@ -13,7 +15,7 @@ School management features:
 - **Printable report cards**: subjects, CA/exam, grades, average, position, remarks and next-term date.
 - **Settings**: current term and session, term dates, classes and subjects.
 
-School details (name, address, phones, motto) live in `src/lib/school.ts`; logo and photos are in `public/images/`.
+School details (name, address, phones, motto) live in `src/lib/school.ts`; the logo, the Nova mascot and the illustrated "mission photo" scenes are SVG components in `src/components/space/` (no photographs are used).
 
 ## Run it
 
@@ -22,15 +24,15 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-### Demo logins (password for all: `lifebuilders`)
+### Demo logins (password for all: `novaridge`)
 
 | Who | Email |
 |---|---|
-| Pupil (Zainab, Primary 4) | student@lifebuilders.test |
-| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@lifebuilders.test |
-| Teacher (Mr Bakare: Science, Computer, Arts) | science@lifebuilders.test |
-| Parent (Mrs Bello: Zainab and Kemi) | parent@lifebuilders.test |
-| Admin (Head Teacher) | admin@lifebuilders.test |
+| Pupil (Zainab, Primary 4) | student@novaridge.test |
+| Teacher (Mrs Okafor: Maths, English, Social Studies) | teacher@novaridge.test |
+| Teacher (Mr Bakare: Science, Computer, Arts) | science@novaridge.test |
+| Parent (Mrs Bello: Zainab and Kemi) | parent@novaridge.test |
+| Admin (Head Teacher) | admin@novaridge.test |
 
 The login page also has one-tap demo buttons.
 

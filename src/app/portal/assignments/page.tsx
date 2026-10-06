@@ -86,7 +86,7 @@ export default async function AssignmentsPage() {
           })}
         </div>
       ) : (
-        <Empty emoji="🎈" text="No assignments yet." />
+        <Empty emoji="🎈" text="No homework missions yet." />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PrintButton } from "@/components/PrintButton";
+import { LogoMark } from "@/components/space/Art";
 import { Notice } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { getDB } from "@/lib/db";
@@ -33,20 +33,20 @@ export default async function ReceiptPage({ params, searchParams }: PageProps<"/
       {sp.new && <Notice>✅ Payment saved. Print or share this receipt with the parent.</Notice>}
       <div className="card border-t-8 border-sky p-8 print:shadow-none print:ring-0">
         <div className="flex items-center gap-4 border-b-2 border-dashed border-ink/10 pb-4">
-          <Image src={school.logo} alt="" width={64} height={64} className="h-16 w-16 rounded-full" />
+          <LogoMark className="h-16 w-16 shrink-0" />
           <div>
             <h1 className="text-xl font-bold leading-tight text-sky">{school.name.toUpperCase()}</h1>
             <p className="text-xs text-ink/60">{school.shortAddress} · {school.phones[0]}</p>
           </div>
           <div className="ml-auto text-right">
             <p className="font-display text-lg font-bold text-coral">RECEIPT</p>
-            <p className="font-mono text-sm">{p.receiptNo}</p>
+            <p className="whitespace-nowrap font-mono text-sm">{p.receiptNo}</p>
           </div>
         </div>
         <dl className="grid grid-cols-2 gap-y-2 py-5 text-sm">
           <dt className="text-ink/50">Received from</dt><dd className="font-semibold">{s.parentId ? who(s.parentId)?.name : "Parent/guardian"}</dd>
           <dt className="text-ink/50">For pupil</dt><dd className="font-semibold">{s.name} ({s.admissionNo})</dd>
-          <dt className="text-ink/50">Class</dt><dd>{klass(s.classId!)?.name}{s.boarding ? " · Boarder" : ""}</dd>
+          <dt className="text-ink/50">Class</dt><dd>{klass(s.classId!)?.name}{s.boarding ? " · Extended day" : ""}</dd>
           <dt className="text-ink/50">Term</dt><dd>{p.term}, {p.session}</dd>
           <dt className="text-ink/50">Date</dt><dd>{formatDate(p.date, { dateStyle: "long" })}</dd>
           <dt className="text-ink/50">Method</dt><dd>{p.method}{p.reference ? ` · ${p.reference}` : ""}</dd>
@@ -64,7 +64,7 @@ export default async function ReceiptPage({ params, searchParams }: PageProps<"/
           <p>Received by: {who(p.receivedBy)?.name ?? "Bursary"}</p>
           <p className="border-t border-ink/30 pt-1">Bursar&apos;s signature</p>
         </div>
-        <p className="mt-6 text-center font-display text-sm text-sky">{school.tagline}</p>
+        <p className="mt-6 text-center font-display text-sm text-sky">✦ Thank you for supporting our young explorers ✦</p>
       </div>
     </div>
   );

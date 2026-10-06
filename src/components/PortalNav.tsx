@@ -6,7 +6,7 @@ import type { Role } from "@/lib/types";
 
 const NAV: Record<Role, { href: string; label: string; emoji: string }[]> = {
   student: [
-    { href: "/portal", label: "My day", emoji: "🏠" },
+    { href: "/portal", label: "My mission", emoji: "🚀" },
     { href: "/portal/notes", label: "Notes", emoji: "📒" },
     { href: "/portal/assignments", label: "Homework", emoji: "✍️" },
     { href: "/portal/quizzes", label: "Quizzes", emoji: "🧠" },
@@ -16,7 +16,7 @@ const NAV: Record<Role, { href: string; label: string; emoji: string }[]> = {
     { href: "/portal/notices", label: "Notice board", emoji: "📌" },
   ],
   teacher: [
-    { href: "/portal", label: "Dashboard", emoji: "🏠" },
+    { href: "/portal", label: "Mission Control", emoji: "🛰️" },
     { href: "/portal/students", label: "My pupils", emoji: "🧒" },
     { href: "/portal/notes", label: "Notes & materials", emoji: "📒" },
     { href: "/portal/assignments", label: "Assignments", emoji: "✍️" },
@@ -27,13 +27,13 @@ const NAV: Record<Role, { href: string; label: string; emoji: string }[]> = {
     { href: "/portal/notices", label: "Notice board", emoji: "📌" },
   ],
   parent: [
-    { href: "/portal", label: "My children", emoji: "👪" },
+    { href: "/portal", label: "My explorers", emoji: "👪" },
     { href: "/portal/fees", label: "School fees", emoji: "💳" },
     { href: "/portal/timetable", label: "Timetable", emoji: "🗓️" },
     { href: "/portal/notices", label: "Notice board", emoji: "📌" },
   ],
   admin: [
-    { href: "/portal", label: "Dashboard", emoji: "🏠" },
+    { href: "/portal", label: "Mission Control", emoji: "🛰️" },
     { href: "/portal/students", label: "Students", emoji: "🧒" },
     { href: "/portal/fees", label: "Fees & payments", emoji: "💳" },
     { href: "/portal/admissions", label: "Admissions", emoji: "📝" },
@@ -48,23 +48,24 @@ const NAV: Record<Role, { href: string; label: string; emoji: string }[]> = {
   ],
 };
 
-const COLORS = ["bg-sky", "bg-grass", "bg-coral", "bg-grape", "bg-sun"];
+const COLORS = ["bg-sun", "bg-glow", "bg-rocket", "bg-lilac"];
 
 export function PortalNav({ role }: { role: Role }) {
   const path = usePathname();
   return (
-    <nav className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
+    <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0" aria-label="Portal">
       {NAV[role].map((item, i) => {
         const active = item.href === "/portal" ? path === "/portal" : path.startsWith(item.href);
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={`flex shrink-0 items-center gap-3 rounded-2xl px-3 py-2 font-display font-medium transition ${
-              active ? "bg-white text-ink shadow-[0_4px_0_rgba(31,42,68,0.08)] ring-2 ring-ink/5" : "text-ink/70 hover:bg-white/60"
+            aria-current={active ? "page" : undefined}
+            className={`flex shrink-0 items-center gap-3 rounded-2xl px-3 py-2 lg:py-1.5 font-display font-semibold transition ${
+              active ? "bg-white text-ink shadow-[0_4px_0_rgba(0,0,0,0.25)]" : "text-white/80 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <span className={`grid h-9 w-9 place-items-center rounded-xl text-lg ${active ? COLORS[i % COLORS.length] : "bg-white/70"}`}>{item.emoji}</span>
+            <span className={`grid h-9 w-9 place-items-center rounded-full text-lg lg:h-8 lg:w-8 lg:text-base ${active ? COLORS[i % COLORS.length] : "bg-white/10"}`}>{item.emoji}</span>
             {item.label}
           </Link>
         );

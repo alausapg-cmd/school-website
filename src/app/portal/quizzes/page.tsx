@@ -54,7 +54,7 @@ export default async function QuizzesPage() {
           })}
         </div>
       ) : (
-        <Empty emoji="🤔" text="No quizzes yet." />
+        <Empty emoji="🤔" text="No quizzes in orbit yet." />
       )}
     </div>
   );

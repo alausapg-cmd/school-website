@@ -1,32 +1,80 @@
 @import "tailwindcss";
 
 @theme {
-  --color-sun: #F5B800;
-  --color-sun-soft: #FFF4CC;
-  --color-sky: #157A3C;
-  --color-sky-soft: #DDF2E3;
-  --color-grass: #6DB33F;
-  --color-grass-soft: #EAF6DC;
-  --color-coral: #D7263D;
-  --color-coral-soft: #FCE3E6;
-  --color-grape: #2E7DC4;
-  --color-grape-soft: #DFEEFB;
-  --color-ink: #13291C;
-  --color-cream: #F7FAF1;
-  --font-display: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
-  --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+  /* Novaridge palette: night navy, rocket orange, teal, lilac and star yellow. */
+  --color-sun: #FFC23D;
+  --color-sun-soft: #FFF3D3;
+  --color-sky: #3A3FBF;
+  --color-sky-soft: #E7E8FC;
+  --color-grass: #0B8A7E;
+  --color-grass-soft: #D9F4EF;
+  --color-coral: #DF5418;
+  --color-coral-soft: #FFE8DC;
+  --color-grape: #7A4FD6;
+  --color-grape-soft: #EEE7FD;
+  --color-ink: #161A3D;
+  --color-cream: #F7F5FE;
+
+  /* Extra space colours for the night-sky sections. */
+  --color-night: #0B0E2B;
+  --color-night-2: #1A1E57;
+  --color-rocket: #FF7A2F;
+  --color-glow: #45E3CC;
+  --color-lilac: #C8B6FF;
+  --color-star: #FFD95A;
+
+  --font-display: var(--font-baloo), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-lexend), ui-rounded, system-ui, sans-serif;
+  --font-mono: var(--font-spacemono), ui-monospace, monospace;
+
   --animate-float: float 6s ease-in-out infinite;
   --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-twinkle: twinkle 3.2s ease-in-out infinite;
+  --animate-orbit: orbit 28s linear infinite;
+  --animate-orbit-rev: orbit 28s linear infinite reverse;
+  --animate-spin-slow: orbit 60s linear infinite;
+  --animate-flame: flame 0.18s ease-in-out infinite alternate;
+  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-bob: bob 4s ease-in-out infinite;
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-12px) rotate(3deg); }
 }
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-6deg); }
   75% { transform: rotate(6deg); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes flame {
+  from { transform: scaleY(0.85); opacity: 0.85; }
+  to { transform: scaleY(1.15); opacity: 1; }
+}
+@keyframes shoot {
+  0% { transform: translate(0, 0) rotate(20deg); opacity: 0; }
+  4% { opacity: 1; }
+  12% { transform: translate(420px, 150px) rotate(20deg); opacity: 0; }
+  100% { transform: translate(420px, 150px) rotate(20deg); opacity: 0; }
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(18px, -10px); }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -38,25 +86,50 @@ body {
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+::selection {
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body { background: white; }
 }
 
 @utility card {
-  @apply rounded-3xl bg-white p-6 shadow-[0_6px_0_rgba(31,42,68,0.08)] ring-2 ring-ink/5;
+  @apply rounded-[1.75rem] bg-white p-6 shadow-[0_6px_0_rgba(58,63,191,0.08)] ring-2 ring-ink/5;
 }
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-display text-base font-semibold transition active:translate-y-0.5 disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-display text-base font-bold transition active:translate-y-0.5 disabled:opacity-50;
 }
 @utility btn-primary {
-  @apply btn bg-sky text-white shadow-[0_4px_0_#0d5527] hover:bg-sky/90;
+  @apply btn bg-sky text-white shadow-[0_4px_0_#262a8a] hover:bg-[#3237ad];
 }
 @utility btn-sun {
-  @apply btn bg-sun text-ink shadow-[0_4px_0_#c99700] hover:brightness-105;
+  @apply btn bg-sun text-ink shadow-[0_4px_0_#d99a12] hover:brightness-105;
 }
 @utility btn-grass {
-  @apply btn bg-grass text-white shadow-[0_4px_0_#4f8a2a] hover:brightness-105;
+  @apply btn bg-grass text-white shadow-[0_4px_0_#066358] hover:brightness-110;
+}
+@utility btn-rocket {
+  @apply btn bg-rocket text-ink shadow-[0_4px_0_#c2541a] hover:brightness-105;
 }
 @utility btn-ghost {
-  @apply btn bg-white text-ink ring-2 ring-ink/10 hover:bg-ink/5;
+  @apply btn bg-white text-ink ring-2 ring-ink/10 hover:bg-sky-soft;
+}
+@utility btn-space {
+  @apply btn bg-white/10 text-white ring-2 ring-white/35 backdrop-blur hover:bg-white/20;
 }
 @utility btn-danger {
   @apply btn bg-coral-soft text-coral hover:bg-coral hover:text-white;
@@ -65,11 +138,42 @@ h1, h2, h3, h4 {
   @apply w-full rounded-2xl border-2 border-ink/10 bg-white px-4 py-2.5 text-ink outline-none transition focus:border-sky focus:ring-4 focus:ring-sky/20;
 }
 @utility label {
-  @apply mb-1.5 block font-display text-sm font-semibold text-ink/80;
+  @apply mb-1.5 block font-display text-sm font-bold text-ink/80;
 }
 @utility chip {
   @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold;
 }
 @utility page-title {
   @apply font-display text-3xl font-bold sm:text-4xl;
+}
+@utility kicker {
+  @apply font-mono text-xs font-bold uppercase tracking-[0.2em];
+}
+/* A tiled, twinkle-free field of stars. Pair with a dark background. */
+@utility stars {
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 32% 72%, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 58% 34%, #FFD95A 50%, transparent 51%),
+    radial-gradient(1px 1px at 76% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 88% 64%, #C8B6FF 50%, transparent 51%),
+    radial-gradient(1px 1px at 44% 92%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 56%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 66% 82%, #fff 50%, transparent 51%);
+  background-size: 260px 260px;
+}
+@utility stars-lg {
+  background-image:
+    radial-gradient(2px 2px at 22% 28%, #fff 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 70% 60%, #FFD95A 50%, transparent 51%),
+    radial-gradient(2px 2px at 84% 22%, #45E3CC 50%, transparent 51%),
+    radial-gradient(2px 2px at 40% 84%, #fff 50%, transparent 51%);
+  background-size: 420px 420px;
+}
+@utility night {
+  background:
+    radial-gradient(ellipse at 80% 0%, rgba(122, 79, 214, 0.45), transparent 55%),
+    radial-gradient(ellipse at 0% 100%, rgba(69, 227, 204, 0.18), transparent 50%),
+    linear-gradient(180deg, #0B0E2B 0%, #1A1E57 100%);
+  color: white;
 }

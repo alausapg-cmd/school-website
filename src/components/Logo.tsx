@@ -1,21 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
-import { school } from "@/lib/school";
+import { LogoMark } from "./space/Art";
 
 export function Logo({ light = false }: { light?: boolean }) {
   return (
-    <Link href="/" className="group flex items-center gap-2.5">
-      <Image
-        src={school.logo}
-        alt=""
-        width={48}
-        height={48}
-        priority
-        className="h-12 w-12 rounded-full bg-white shadow-[0_3px_0_rgba(0,0,0,0.12)] ring-2 ring-sun transition group-hover:animate-wiggle"
-      />
-      <span className={`font-display text-lg font-bold leading-none ${light ? "text-white" : "text-sky"}`}>
-        LIFE BUILDERS
-        <span className={`block text-[0.7rem] font-semibold tracking-wide ${light ? "text-sun" : "text-coral"}`}>INT&apos;L SCHOOLS · DAY &amp; BOARDING</span>
+    <Link href="/" className="group flex items-center gap-2.5" aria-label="Novaridge Academy home">
+      <LogoMark className="h-12 w-12 shrink-0 drop-shadow-[0_3px_0_rgba(22,26,61,0.15)] transition group-hover:rotate-[-12deg]" />
+      <span className={`font-display text-xl font-extrabold leading-none tracking-tight ${light ? "text-white" : "text-ink"}`}>
+        Novaridge
+        <span className={`mt-0.5 block font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] ${light ? "text-star" : "text-coral"}`}>Academy · Lekki</span>
       </span>
     </Link>
   );

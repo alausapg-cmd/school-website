@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Baloo_2, Lexend, Space_Mono } from "next/font/google";
 import { school } from "@/lib/school";
 import "./globals.css";
 
-const fredoka = Fredoka({ variable: "--font-fredoka", subsets: ["latin"] });
-const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
+const baloo = Baloo_2({ variable: "--font-baloo", subsets: ["latin"], weight: ["500", "600", "700", "800"] });
+const lexend = Lexend({ variable: "--font-lexend", subsets: ["latin"] });
+const spaceMono = Space_Mono({ variable: "--font-spacemono", subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
-  title: { default: school.name, template: `%s · ${school.name}` },
-  description: `${school.name}: ${school.motto}`,
+  title: { default: `${school.name} · ${school.tagline}`, template: `%s · ${school.name}` },
+  description: `${school.name}, a ${school.kind.toLowerCase()} in Lekki. ${school.motto}.`,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}>
+    <html lang="en" className={`${baloo.variable} ${lexend.variable} ${spaceMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

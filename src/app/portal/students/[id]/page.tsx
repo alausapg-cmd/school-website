@@ -49,7 +49,7 @@ export default async function StudentProfile({ params, searchParams }: PageProps
           <div className="mt-1 flex flex-wrap gap-2 text-sm">
             <span className="chip bg-sky-soft text-sky">{klass(s.classId!)?.name}</span>
             <span className="chip bg-ink/5 font-mono">{s.admissionNo}</span>
-            <span className="chip bg-grape-soft text-grape">{s.boarding ? "🏠 Boarder" : "Day pupil"}</span>
+            <span className="chip bg-grape-soft text-grape">{s.boarding ? "🌙 Extended day" : "☀️ Standard day"}</span>
             {s.gender && <span className="chip bg-ink/5">{s.gender}{age(s.dob) !== null ? `, ${age(s.dob)} years` : ""}</span>}
           </div>
           <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
@@ -142,8 +142,8 @@ export default async function StudentProfile({ params, searchParams }: PageProps
             </div>
             <div><label className="label">Date of birth</label><input name="dob" type="date" defaultValue={s.dob} className="input" /></div>
             <div>
-              <label className="label">Day or boarding</label>
-              <select name="boarding" defaultValue={s.boarding ? "yes" : "no"} className="input"><option value="no">Day pupil</option><option value="yes">Boarder</option></select>
+              <label className="label">Day plan</label>
+              <select name="boarding" defaultValue={s.boarding ? "yes" : "no"} className="input"><option value="no">Standard day</option><option value="yes">Extended day</option></select>
             </div>
             <div><label className="label">Address</label><input name="address" defaultValue={s.address} className="input" /></div>
             <div><SubmitButton>Save changes</SubmitButton></div>

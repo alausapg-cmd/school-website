@@ -31,7 +31,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/portal/
 
   return (
     <div>
-      <PageHeader emoji="🧒" title={isAdmin ? "Students" : "My pupils"} text={`${list.length} pupils · ${boys} boys, ${list.length - boys} girls · ${list.filter((s) => s.boarding).length} boarders`} />
+      <PageHeader emoji="🧒" title={isAdmin ? "Students" : "My pupils"} text={`${list.length} pupils · ${boys} boys, ${list.length - boys} girls · ${list.filter((s) => s.boarding).length} on extended day`} />
 
       {isAdmin && (
         <details className="card mb-6" open={sp.new === "1"}>
@@ -49,8 +49,8 @@ export default async function StudentsPage({ searchParams }: PageProps<"/portal/
               </div>
               <div><label className="label" htmlFor="dob">Date of birth</label><input id="dob" name="dob" type="date" className="input" /></div>
               <div>
-                <label className="label" htmlFor="boarding">Day or boarding</label>
-                <select id="boarding" name="boarding" className="input"><option value="no">Day pupil</option><option value="yes">Boarder</option></select>
+                <label className="label" htmlFor="boarding">Day plan</label>
+                <select id="boarding" name="boarding" className="input"><option value="no">Standard day</option><option value="yes">Extended day</option></select>
               </div>
               <div><label className="label" htmlFor="address">Home address</label><input id="address" name="address" className="input" /></div>
             </div>
@@ -79,9 +79,9 @@ export default async function StudentsPage({ searchParams }: PageProps<"/portal/
           {db.classes.filter((c) => classIds.includes(c.id)).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
         <select name="mode" defaultValue={mode} className="input w-auto py-2">
-          <option value="">Day & boarding</option>
-          <option value="day">Day pupils</option>
-          <option value="boarding">Boarders</option>
+          <option value="">All day plans</option>
+          <option value="day">Standard day</option>
+          <option value="boarding">Extended day</option>
         </select>
         <button className="btn-ghost py-2">Filter</button>
       </form>
@@ -110,7 +110,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/portal/
                     </td>
                     <td className="font-mono text-xs">{s.admissionNo}</td>
                     <td>{klass(s.classId!)?.name}</td>
-                    <td>{s.boarding ? <span className="chip bg-grape-soft text-grape">🏠 Boarder</span> : <span className="chip bg-ink/5">Day</span>}</td>
+                    <td>{s.boarding ? <span className="chip bg-grape-soft text-grape">🌙 Extended</span> : <span className="chip bg-ink/5">Standard</span>}</td>
                     <td>{parent ? <>{parent.name}<div className="text-xs text-ink/50">{parent.phone}</div></> : "–"}</td>
                     {f && (
                       <td className="pr-4">
@@ -125,7 +125,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/portal/
           </table>
         </div>
       ) : (
-        <Empty emoji="🔍" text="No pupils match." />
+        <Empty emoji="🔍" text="No explorers match that search." />
       )}
     </div>
   );

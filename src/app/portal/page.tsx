@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
+import { Nova, Planet } from "@/components/space/Art";
 import { Empty, Stars, Stat, SubjectChip } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { getDB } from "@/lib/db";
@@ -14,6 +16,30 @@ import type { DB, Notice, User } from "@/lib/types";
 function greeting() {
   const h = new Date().getHours();
   return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+}
+
+// Night-sky welcome banner with Nova the rocket and a speech bubble.
+function Banner({ title, kicker, children, say }: { title: ReactNode; kicker: string; children?: ReactNode; say: string }) {
+  return (
+    <div className="night relative overflow-hidden rounded-[2rem] p-6 sm:p-8">
+      <div aria-hidden className="stars absolute inset-0 opacity-70" />
+      <Planet color="#FF7A2F" shade="#B8400F" ring="#45E3CC" className="absolute -right-8 -top-10 h-28 w-28 opacity-80 sm:-bottom-10 sm:right-72 sm:top-auto sm:h-24 sm:w-24" />
+      <div className="relative flex items-end justify-between gap-4">
+        <div className="min-w-0">
+          <p className="kicker text-glow">{kicker}</p>
+          <h1 className="mt-1 text-3xl font-extrabold sm:text-4xl">{title}</h1>
+          {children && <div className="mt-1 text-white/85 sm:text-lg">{children}</div>}
+        </div>
+        <div className="hidden shrink-0 items-end gap-2 sm:flex">
+          <p className="relative mb-16 max-w-44 rounded-2xl bg-white px-3 py-2 text-sm font-semibold text-ink shadow-lg">
+            {say}
+            <span aria-hidden className="absolute -right-1.5 bottom-3 h-3 w-3 rotate-45 bg-white" />
+          </p>
+          <Nova className="h-32 w-auto animate-bob" />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default async function Dashboard() {
@@ -42,11 +68,9 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
-        <div className="absolute -right-4 -top-6 text-[8rem] opacity-30" aria-hidden>{user.avatar}</div>
-        <h1 className="relative text-4xl font-bold">{greeting()}, {first}! 👋</h1>
-        <p className="relative mt-1 text-lg opacity-90">Ready for another awesome day of learning?</p>
-      </div>
+      <Banner kicker="Mission Control · Explorer" title={<>{greeting()}, {first}! {user.avatar}</>} say={due.length ? `You have ${due.length} homework mission${due.length > 1 ? "s" : ""}. Let's go!` : "No homework waiting. Time to explore!"}>
+        Ready for another out-of-this-world day of learning?
+      </Banner>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="⭐" value={stars} label="Stars collected" bg="bg-sun-soft" />
         <Stat emoji="✍️" value={due.length} label="Homework to do" bg="bg-coral-soft" />
@@ -76,7 +100,7 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
               })}
             </ul>
           ) : (
-            <Empty emoji="🎉" text="All done! No homework waiting." />
+            <Empty emoji="🎉" text="Mission accomplished! No homework waiting." />
           )}
         </section>
         <section className="card">
@@ -96,7 +120,7 @@ function StudentHome({ user, db }: { user: User; db: DB }) {
               ))}
             </ul>
           ) : (
-            <Empty emoji="🌟" text="You've done every quiz. Superstar!" />
+            <Empty emoji="🌟" text="Every quiz done. You're a superstar!" />
           )}
           {mine.length > 0 && (
             <div className="mt-4 text-sm text-ink/60">
@@ -131,10 +155,9 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} {user.avatar}</h1>
-        <p className="text-ink/60">{db.settings.term}, {db.settings.session} · {classIds.map((c) => klass(c)?.name).join(", ")}</p>
-      </div>
+      <Banner kicker="Mission Control · Teacher" title={<>{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} {user.avatar}</>} say={toMark.length ? `${toMark.length} piece${toMark.length > 1 ? "s" : ""} of work landed for marking.` : "All marked. Have a cup of tea!"}>
+        {db.settings.term}, {db.settings.session} · {classIds.map((c) => klass(c)?.name).join(", ")}
+      </Banner>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat emoji="🧒" value={pupils} label="Pupils in my classes" bg="bg-sky-soft" />
         <Stat emoji="📝" value={toMark.length} label="Submissions to mark" bg="bg-coral-soft" />
@@ -145,12 +168,12 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
         <h2 className="mb-4 text-2xl font-semibold">⚡ Quick actions</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
-            ["/portal/notes#new", "📤", "Upload notes", "bg-sun"],
-            ["/portal/assignments#new", "✍️", "Set homework", "bg-coral"],
-            ["/portal/quizzes/new", "🧠", "Build a quiz", "bg-grape"],
-            ["/portal/attendance", "✅", "Take register", "bg-grass"],
+            ["/portal/notes#new", "📤", "Upload notes", "bg-sun text-ink"],
+            ["/portal/assignments#new", "✍️", "Set homework", "bg-coral text-white"],
+            ["/portal/quizzes/new", "🧠", "Build a quiz", "bg-grape text-white"],
+            ["/portal/attendance", "✅", "Take register", "bg-grass text-white"],
           ].map(([href, e, t, bg]) => (
-            <Link key={href} href={href} className={`${bg} rounded-3xl p-5 text-white transition hover:-translate-y-1 hover:rotate-1`}>
+            <Link key={href} href={href} className={`${bg} rounded-[1.75rem] p-5 shadow-[0_5px_0_rgba(22,26,61,0.15)] transition hover:-translate-y-1 hover:rotate-1`}>
               <div className="text-4xl">{e}</div>
               <div className="mt-2 font-display text-lg font-semibold">{t}</div>
             </Link>
@@ -175,7 +198,7 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
             })}
           </ul>
         ) : (
-          <Empty emoji="☕" text="Nothing to mark right now." />
+          <Empty emoji="☕" text="Nothing to mark right now. Enjoy the quiet orbit." />
         )}
       </section>
     </div>
@@ -184,7 +207,7 @@ function TeacherHome({ user, db }: { user: User; db: DB }) {
 
 function NoticeList({ notices, db }: { notices: Notice[]; db: DB }) {
   const { user: who } = lookups(db);
-  if (!notices.length) return <Empty emoji="📭" text="No notices right now." />;
+  if (!notices.length) return <Empty emoji="📭" text="No new transmissions right now." />;
   return (
     <ul className="space-y-3">
       {notices.map((n) => (
@@ -206,15 +229,12 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
   const kids = childrenOf(db, user);
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem] bg-sky p-8 text-white">
-        <h1 className="text-4xl font-bold">{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} 👋</h1>
-        <p className="mt-1 text-lg opacity-90">
-          {db.settings.term}, {db.settings.session}
-          {db.settings.termEnds ? ` · Term ends ${formatDate(db.settings.termEnds, { day: "numeric", month: "long" })}` : ""}
-        </p>
-      </div>
+      <Banner kicker="Mission Control · Parent" title={<>{greeting()}, {user.name.split(" ").slice(0, 2).join(" ")} 👋</>} say="Here's how your explorers are doing this term.">
+        {db.settings.term}, {db.settings.session}
+        {db.settings.termEnds ? ` · Term ends ${formatDate(db.settings.termEnds, { day: "numeric", month: "long" })}` : ""}
+      </Banner>
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">👧🏽 My children</h2>
+        <h2 className="mb-4 text-2xl font-semibold">🧑🏽‍🚀 My explorers</h2>
         {kids.length ? (
           <div className="grid gap-4 md:grid-cols-2">
             {kids.map((k) => {
@@ -230,7 +250,7 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
                     <span className="grid h-16 w-16 place-items-center rounded-2xl bg-sun-soft text-4xl">{k.avatar}</span>
                     <div className="min-w-0">
                       <h3 className="text-xl font-semibold">{k.name}</h3>
-                      <p className="text-sm text-ink/60">{klass(k.classId!)?.name} · {k.boarding ? "Boarder" : "Day pupil"} · <span className="font-mono">{k.admissionNo}</span></p>
+                      <p className="text-sm text-ink/60">{klass(k.classId!)?.name} · {k.boarding ? "Extended day" : "Standard day"} · <span className="font-mono">{k.admissionNo}</span></p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center">
@@ -257,7 +277,7 @@ function ParentHome({ user, db }: { user: User; db: DB }) {
       </section>
       <section className="card">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">📢 Notices from school</h2>
+          <h2 className="text-2xl font-semibold">📡 Transmissions from school</h2>
           <Link href="/portal/notices" className="font-display font-semibold text-sky">All notices →</Link>
         </div>
         <NoticeList notices={noticesFor(db, user).slice(0, 3)} db={db} />
@@ -280,12 +300,11 @@ function AdminHome({ db }: { db: DB }) {
   const pct = billed ? Math.round((paid / billed) * 100) : 0;
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="page-title">School overview 👑</h1>
-        <p className="text-ink/60">{school.name} · {db.settings.term}, {db.settings.session}</p>
-      </div>
+      <Banner kicker="Mission Control · Flight director" title="School overview 🛰️" say={pending ? `${pending} new crew application${pending > 1 ? "s" : ""} to review.` : "All systems go!"}>
+        {school.name} · {db.settings.term}, {db.settings.session}
+      </Banner>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Stat emoji="🧒" value={pupils.length} label={`Pupils (${boarders} boarders)`} bg="bg-sky-soft" />
+        <Stat emoji="🧒" value={pupils.length} label={`Pupils (${boarders} extended day)`} bg="bg-sky-soft" />
         <Stat emoji="👩‍🏫" value={count("teacher")} label="Teachers" bg="bg-grass-soft" />
         <Stat emoji="📝" value={pending} label="Admission applications open" bg="bg-sun-soft" />
         <Stat emoji="✅" value={todayRecords.length ? `${inToday}/${todayRecords.length}` : "–"} label="In school today" bg="bg-grape-soft" />
@@ -298,8 +317,8 @@ function AdminHome({ db }: { db: DB }) {
           </div>
           <Link href="/portal/fees" className="btn-ghost px-4 py-2 text-sm">Open fees</Link>
         </div>
-        <div className="mt-4 h-5 overflow-hidden rounded-full bg-cream">
-          <div className="h-full rounded-full bg-grass" style={{ width: `${pct}%` }} />
+        <div className="relative mt-4 h-5 overflow-hidden rounded-full bg-cream ring-2 ring-ink/5">
+          <div className="h-full rounded-full bg-gradient-to-r from-grass to-glow" style={{ width: `${pct}%` }} />
         </div>
         <p className="mt-1 text-right text-sm font-semibold">{pct}% collected</p>
       </section>

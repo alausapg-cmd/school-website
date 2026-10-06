@@ -8,7 +8,7 @@ const demo = [
   { label: "Pupil", who: "Zainab, Primary 4", email: `student@${school.demoDomain}`, emoji: "🦊", cls: "bg-sun-soft" },
   { label: "Teacher", who: "Mrs Okafor", email: `teacher@${school.demoDomain}`, emoji: "🌻", cls: "bg-grass-soft" },
   { label: "Parent", who: "Mrs Bello", email: `parent@${school.demoDomain}`, emoji: "👪", cls: "bg-sky-soft" },
-  { label: "Admin", who: "Head Teacher", email: `admin@${school.demoDomain}`, emoji: "👑", cls: "bg-grape-soft" },
+  { label: "Admin", who: "Head Teacher", email: `admin@${school.demoDomain}`, emoji: "🧑‍🚀", cls: "bg-grape-soft" },
 ];
 
 export function LoginForm() {
@@ -35,11 +35,11 @@ export function LoginForm() {
         </div>
         {error && <p className="rounded-2xl bg-coral-soft px-4 py-2 text-sm font-semibold text-coral">{error}</p>}
         <button disabled={pending} className="btn-primary w-full text-lg">
-          {pending ? "Opening…" : "Let's go! 🚀"}
+          {pending ? "3… 2… 1…" : "Launch! 🚀"}
         </button>
       </form>
       <div>
-        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo account (password: {school.demoPassword})</p>
+        <p className="mb-2 text-center text-sm font-semibold text-ink/60">Try a demo crew member (password: {school.demoPassword})</p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {demo.map((d) => (
             <button

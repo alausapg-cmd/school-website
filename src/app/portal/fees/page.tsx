@@ -113,7 +113,7 @@ export default async function FeesPage({ searchParams }: PageProps<"/portal/fees
               {items.map((f) => (
                 <tr key={f.id}>
                   <td className="py-2">{f.name}</td>
-                  <td>{f.classId === "all" ? "All classes" : klass(f.classId)?.name}{f.boardingOnly ? " · boarders" : ""}</td>
+                  <td>{f.classId === "all" ? "All classes" : klass(f.classId)?.name}{f.boardingOnly ? " · extended day" : ""}</td>
                   <td className="text-right tabular-nums">{naira(f.amount)}</td>
                   <td className="w-16 text-right">
                     <form action={deleteFeeItem.bind(null, f.id)}><button className="text-xs font-semibold text-coral hover:underline">Remove</button></form>
@@ -129,7 +129,7 @@ export default async function FeesPage({ searchParams }: PageProps<"/portal/fees
               <option value="all">All classes</option>
               {db.classes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
-            <select name="boardingOnly" className="input py-2"><option value="no">Everyone</option><option value="yes">Boarders only</option></select>
+            <select name="boardingOnly" className="input py-2"><option value="no">Everyone</option><option value="yes">Extended day only</option></select>
             <SubmitButton className="btn-ghost sm:col-span-2">➕ Add fee item</SubmitButton>
           </form>
         </section>
@@ -172,7 +172,7 @@ function ParentFees({ user, db }: { user: User; db: DB }) {
         return (
           <section key={k.id} className="card">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-2xl font-semibold">{k.avatar} {k.name} <span className="text-base font-normal text-ink/50">· {klass(k.classId!)?.name}{k.boarding ? " · Boarder" : ""}</span></h2>
+              <h2 className="text-2xl font-semibold">{k.avatar} {k.name} <span className="text-base font-normal text-ink/50">· {klass(k.classId!)?.name}{k.boarding ? " · Extended day" : ""}</span></h2>
               <span className={`chip ${FEE_STATE[f.state].cls}`}>{FEE_STATE[f.state].label}</span>
             </div>
             <div className="grid gap-6 md:grid-cols-2">

@@ -7,7 +7,7 @@ import { Logo } from "./Logo";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About us" },
+  { href: "/about", label: "About" },
   { href: "/news", label: "News" },
   { href: "/events", label: "Events" },
   { href: "/gallery", label: "Gallery" },
@@ -20,49 +20,52 @@ export function SiteHeader() {
   const active = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-ink/5 bg-cream/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Logo />
-        <nav className="hidden items-center gap-1 md:flex">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-night/90 text-white backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <Logo light />
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`rounded-full px-4 py-2 font-display font-medium transition ${
-                active(l.href) ? "bg-sky-soft text-sky" : "text-ink/70 hover:bg-ink/5 hover:text-ink"
+              aria-current={active(l.href) ? "page" : undefined}
+              className={`relative rounded-full px-4 py-2 font-display font-semibold transition ${
+                active(l.href) ? "bg-white/12 text-star" : "text-white/80 hover:bg-white/10 hover:text-white"
               }`}
             >
               {l.label}
+              {active(l.href) && <span aria-hidden className="absolute -top-0.5 right-2 text-[0.6rem] text-star">✦</span>}
             </Link>
           ))}
         </nav>
         <div className="flex items-center gap-2">
           <Link href="/login" className="btn-sun hidden sm:inline-flex">
-            🎒 Learning Portal
+            🚀 Learning Portal
           </Link>
           <button
-            aria-label="Open menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
-            className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-xl ring-2 ring-ink/10 md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-xl ring-2 ring-white/20 md:hidden"
           >
             {open ? "✕" : "☰"}
           </button>
         </div>
       </div>
       {open && (
-        <nav className="flex flex-col gap-1 border-t-2 border-ink/5 px-4 py-3 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-white/10 px-4 py-3 md:hidden" aria-label="Main">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className={`rounded-2xl px-4 py-3 font-display ${active(l.href) ? "bg-sky-soft text-sky" : ""}`}
+              className={`rounded-2xl px-4 py-3 font-display font-semibold ${active(l.href) ? "bg-white/12 text-star" : "text-white/85"}`}
             >
               {l.label}
             </Link>
           ))}
           <Link href="/login" onClick={() => setOpen(false)} className="btn-sun mt-2">
-            🎒 Learning Portal
+            🚀 Learning Portal
           </Link>
         </nav>
       )}
