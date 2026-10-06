@@ -38,7 +38,6 @@ export default function ContactPage() {
           {[
             ["📍", "Address", school.address],
             ["✉️", "Email", school.email],
-            ["🌐", "Website", school.website],
           ].map(([e, t, v]) => (
             <div key={t} className="card flex items-center gap-4">
               <span className="text-4xl">{e}</span>

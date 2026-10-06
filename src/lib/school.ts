@@ -12,7 +12,6 @@ export const school = {
   shortAddress: "91–95 Igbusi Road, Iyana Ilogbo, Ogun State",
   phones: ["0818 342 9256", "0703 836 7666", "0908 462 4719", "0703 661 6844", "0706 068 8180"],
   email: "lifebuilders100@yahoo.com",
-  website: "lifebuildersinternationalschs.com",
   currentTerm: "First Term",
   currentSession: "2026/2027",
   entranceExams: ["2026-07-11", "2026-08-01", "2026-08-22", "2026-09-05"],
